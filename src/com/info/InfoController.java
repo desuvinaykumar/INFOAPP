@@ -42,7 +42,7 @@ public class InfoController {
 		String sql = "select ta_info_title title, ta_info_category category, ta_info_info information, DATE_FORMAT(ta_info_date,'%Y%m%d%H%i%s') datetime from ta_info ";
 		sql += " where 1 = 1 ";
 		if(info.getCategory()!=null  && !info.getCategory().equals("")){
-			sql += " and upper(category) = upper('"+info.getCategory()+"') ";
+			sql += " and upper(ta_info_category) = upper('"+info.getCategory()+"') ";
 		}
 		if(info.getDatetime()!=null && !info.getDatetime().equals("")){
 			sql += " and DATE_FORMAT(ta_info_date,'%Y%m%d%H%i%s') < convert('"+info.getDatetime()+"', unsigned integer)";
