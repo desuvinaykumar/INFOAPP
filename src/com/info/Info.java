@@ -7,6 +7,16 @@ public class Info {
 	private String information;
 	
 	private String category;
+	
+	private String datetime;
+
+	public String getDatetime() {
+		return datetime;
+	}
+
+	public void setDatetime(String datetime) {
+		this.datetime = datetime;
+	}
 
 	public String getTitle() {
 		return title;
