@@ -1,6 +1,6 @@
 angular.module('ionicApp', ['ionic'])
 
-.controller('MyCtrl', function($scope, $ionicModal, $http, $ionicPopup) {
+.controller('MyCtrl', function($scope, $ionicModal, $http, $ionicPopup, $ionicLoading) {
   $scope.myTitle = 'Any Information!!!';
   
   $scope.params={};
@@ -21,9 +21,28 @@ angular.module('ionicApp', ['ionic'])
     $http({method:"POST",
 			url:"/INFOAPP/rest/info/create",
 			data:data}
-	).then(function(){alert("success");},function(){alert("error");});
+	).then(function(){
+		$ionicLoading.hide();
+		$ionicLoading.show({
+		      template: '<div style="color:green">Information posted</div>'
+		    });
+		setTimeout(function(){
+			$ionicLoading.hide();
+		}, 3000);
+	},function(){
+		$ionicLoading.hide();
+		$ionicLoading.show({
+		      template: '<div style="color:red">Error in posting information</div>'
+		    });
+		setTimeout(function(){
+			$ionicLoading.hide();
+		}, 3000);
+	});
     $scope.modal.hide();
 	$scope.modal.remove();
+	$ionicLoading.show({
+	      template: 'Posting info...'
+	    });
   };
   
   $scope.closeInfo = function() {
