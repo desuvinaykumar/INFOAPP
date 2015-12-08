@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width">
 
-  <title>Ionic Starter Template</title>
+  <title>Any information</title>
 
   <link href="css/ionic.min.css" rel="stylesheet">
   
@@ -17,16 +17,28 @@
 <body ng-controller="MyCtrl">
 
   <ion-header-bar class="bar-positive">
+  	<button class="button icon ion-navicon"></button>
     <h1 class="title">{{myTitle}}</h1>
 	<button class="button button-icon-small icon-right ion-information-circled" ng-click="doSomething()">
     Post
     </button>
   </ion-header-bar>
-
-  <ion-content class="padding">
-    <h2>Content</h2>
-  </ion-content>
-
+  <ion-content>
+  <div class="list">
+      <div class="item" ng-repeat="item in params.items">
+      <span class="item-note">
+	      {{item.category}}
+	    </span>
+    	<h2>{{item.title}}</h2>
+    	<p>{{item.information}}</p>
+    	
+	  </div>
+  </div>
+  <ion-infinite-scroll distance="1%"
+    on-infinite="loadMore()" 
+    ng-if="!params.moreData">
+  </ion-infinite-scroll>
+	</ion-content>
 </body>
 
 <script id="my-modal.html" type="text/ng-template">

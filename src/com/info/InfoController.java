@@ -63,4 +63,42 @@ public class InfoController {
 		
 	}
 	
+	@RequestMapping(value = "count", method = RequestMethod.POST)
+	public @ResponseBody
+	CountInfo count(@RequestBody Info info) {
+
+		String sql = "select Count(*) datetime from ta_info ";
+		sql += " where 1 = 1 ";
+		if(info.getCategory()!=null  && !info.getCategory().equals("")){
+			sql += " and upper(ta_info_category) = upper('"+info.getCategory()+"') ";
+		}
+		if(info.getDatetime()!=null && !info.getDatetime().equals("")){
+			sql += " and DATE_FORMAT(ta_info_date,'%Y%m%d%H%i%s') < convert('"+info.getDatetime()+"', unsigned integer)";
+		}
+		
+		return jdbcTemplate.queryForObject(sql, new RowMapper<CountInfo>(){
+			@Override  
+			public CountInfo mapRow(ResultSet rs, int rownumber) throws SQLException {  
+				CountInfo e=new CountInfo();  
+				e.setNo(rs.getInt(1));
+				return e;  
+			}  
+		});
+		
+	}
+	
+}
+
+class CountInfo{
+	
+	private int no;
+
+	public int getNo() {
+		return no;
+	}
+
+	public void setNo(int no) {
+		this.no = no;
+	}
+	
 }
