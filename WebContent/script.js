@@ -29,6 +29,15 @@ angular.module('ionicApp', ['ionic'])
 		checkCount();
 	};
 	
+	$scope.showInfo = function(info){
+		$ionicPopup.show({
+			title: 'Information',
+			template: info.information,
+		    buttons: [
+		      { text: 'Close' }]
+		});
+	};
+	
 	function populateInfo(){
 		if(!$scope.params.lastDate){
 			$scope.params.items = [];

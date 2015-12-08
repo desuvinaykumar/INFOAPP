@@ -25,7 +25,7 @@
   </ion-header-bar>
   <ion-content>
   <div class="list">
-      <div class="item" ng-repeat="item in params.items">
+      <div class="item" ng-repeat="item in params.items" ng-click=showInfo(item)>
       <span class="item-note">
 	      {{item.category}}
 	    </span>
