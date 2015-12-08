@@ -39,7 +39,7 @@ angular.module('ionicApp', ['ionic'])
 	function checkCount(){
 		$http({method:"POST",
 			url:"/INFOAPP/rest/info/count",
-			data:{datetime:$scope.params.lastDate}}
+			data:{category:$scope.params.currentCategory, datetime:$scope.params.lastDate}}
 		).then(function(response){
 			var data = response.data;
 			$scope.params.moreData = parseInt(data.no)?false:true;
