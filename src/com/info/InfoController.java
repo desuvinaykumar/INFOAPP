@@ -31,7 +31,7 @@ public class InfoController {
 				info.getCategory(), info.getInformation()  
 			});
 		
-		return info;
+		return this.fetch(info).get(0);
 
 	}
 	
@@ -39,10 +39,10 @@ public class InfoController {
 	public @ResponseBody
 	List<Info> fetch(@RequestBody Info info) {
 
-		String sql = "select ta_info_title title, ta_info_category category, ta_info_info information, DATE_FORMAT(ta_info_date,'%Y%m%d%H%i%s') datetime from ta_info ";
-		sql += " where 1 = 1 ";
+		String sql = "select ta_info_title title, ta_category_desc category, ta_info_info information, DATE_FORMAT(ta_info_date,'%Y%m%d%H%i%s') datetime from ta_info, ta_category ";
+		sql += " where ta_category_id = ta_info_category ";
 		if(info.getCategory()!=null  && !info.getCategory().equals("")){
-			sql += " and upper(ta_info_category) = upper('"+info.getCategory()+"') ";
+			sql += " and ta_info_category = "+info.getCategory()+" ";
 		}
 		if(info.getDatetime()!=null && !info.getDatetime().equals("")){
 			sql += " and DATE_FORMAT(ta_info_date,'%Y%m%d%H%i%s') < convert('"+info.getDatetime()+"', unsigned integer)";
@@ -67,10 +67,10 @@ public class InfoController {
 	public @ResponseBody
 	CountInfo count(@RequestBody Info info) {
 
-		String sql = "select Count(*) datetime from ta_info ";
-		sql += " where 1 = 1 ";
+		String sql = "select Count(*) from ta_info, ta_category ";
+		sql += " where ta_category_id = ta_info_category ";
 		if(info.getCategory()!=null  && !info.getCategory().equals("")){
-			sql += " and upper(ta_info_category) = upper('"+info.getCategory()+"') ";
+			sql += " and ta_info_category = "+info.getCategory()+" ";
 		}
 		if(info.getDatetime()!=null && !info.getDatetime().equals("")){
 			sql += " and DATE_FORMAT(ta_info_date,'%Y%m%d%H%i%s') < convert('"+info.getDatetime()+"', unsigned integer)";
@@ -81,6 +81,24 @@ public class InfoController {
 			public CountInfo mapRow(ResultSet rs, int rownumber) throws SQLException {  
 				CountInfo e=new CountInfo();  
 				e.setNo(rs.getInt(1));
+				return e;  
+			}  
+		});
+		
+	}
+	
+	@RequestMapping(value = "categoryList", method = RequestMethod.POST)
+	public @ResponseBody
+	List<Category> categoryList() {
+
+		String sql = "select ta_category_id, ta_category_desc from ta_category order by ta_category_id";
+		
+		return jdbcTemplate.query(sql, new RowMapper<Category>(){
+			@Override  
+			public Category mapRow(ResultSet rs, int rownumber) throws SQLException {  
+				Category e=new Category();  
+				e.setId(rs.getInt(1));
+				e.setDesc(rs.getString(2));
 				return e;  
 			}  
 		});

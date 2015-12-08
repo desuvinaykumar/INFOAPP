@@ -27,9 +27,18 @@ CREATE TABLE `ta_info` (
   `ta_info_date` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-/*Data for the table `ta_info` */
+alter table `ta_info` change `ta_info_category` `ta_info_category` numeric(3) NOT NULL;
 
-insert  into `ta_info`(`ta_info_title`,`ta_info_category`,`ta_info_info`,`ta_info_date`) values ('test title','test category','test information','2015-11-27 01:15:48'),('test title','test category','test information','2015-12-04 19:04:48'),('test title','test category','test information','2015-12-04 19:54:00'),('test title','test category','test information','2015-12-04 20:02:50');
+DROP TABLE IF EXISTS `ta_category`;
+
+create table `ta_category`( `ta_category_id` numeric(3) , `ta_category_desc` varchar(25) );
+
+insert into `ta_category`(`ta_category_id`,`ta_category_desc`) values ( '1','Travel');
+insert into `ta_category`(`ta_category_id`,`ta_category_desc`) values ( '2','Recharge Offer');
+insert into `ta_category`(`ta_category_id`,`ta_category_desc`) values ( '3','Shopping');
+update `ta_category` set `ta_category_id`='2',`ta_category_desc`='Recharge' where `ta_category_id`='2' and `ta_category_desc`='Recharge Offer';
+insert into `ta_category`(`ta_category_id`,`ta_category_desc`) values ( '4','Traffic');
+insert into `ta_category`(`ta_category_id`,`ta_category_desc`) values ( '5','Other');
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;

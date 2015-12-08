@@ -9,8 +9,32 @@ angular.module('ionicApp', ['ionic'])
 	$scope.params.information = '';
 	$scope.params.items = [];
 	$scope.modal = null;
+	$scope.params.currentCategory = "";
 	$scope.params.lastDate = "";
 	$scope.params.moreData = false;
+	$scope.params.categoryList = [];
+	$scope.params.isHomePage = true;
+	$scope.params.isCategoryPage = false;
+	
+	fetchCategoryList();
+	
+	function resetToHome(){
+		$scope.params.items = [];
+		$scope.params.currentCategory = "";
+		$scope.params.lastDate = "";
+		$scope.params.moreData = false;
+		//populateInfo();
+	}
+	
+	function fetchCategoryList(){
+		$http({method:"POST",
+			url:"/INFOAPP/rest/info/categoryList"}
+		).then(function(response){
+			$scope.params.categoryList = response.data;
+		},function(response){
+			
+		});
+	}
 	
 	function checkCount(){
 		$http({method:"POST",
@@ -25,19 +49,6 @@ angular.module('ionicApp', ['ionic'])
 		});
 	}
 	
-	$scope.checkInfoCount = function(){
-		checkCount();
-	};
-	
-	$scope.showInfo = function(info){
-		$ionicPopup.show({
-			title: 'Information',
-			template: info.information,
-		    buttons: [
-		      { text: 'Close' }]
-		});
-	};
-	
 	function populateInfo(){
 		if(!$scope.params.lastDate){
 			$scope.params.items = [];
@@ -45,7 +56,7 @@ angular.module('ionicApp', ['ionic'])
 		}
 		$http({method:"POST",
 			url:"/INFOAPP/rest/info/fetch",
-			data:{datetime:$scope.params.lastDate}}
+			data:{category:$scope.params.currentCategory, datetime:$scope.params.lastDate}}
 		).then(function(response){
 			var data = response.data;
 			if(data){
@@ -72,7 +83,39 @@ angular.module('ionicApp', ['ionic'])
 	}
 	
 	//populateInfo();
+	$scope.showHomePage = function(){
+		$scope.params.isHomePage = true;
+		$scope.params.isCategoryPage = false;
+		resetToHome();
+	};
 	
+	$scope.showCategoryPage = function(){
+		$scope.params.isHomePage = false;
+		$scope.params.isCategoryPage = true;
+	};
+	
+	$scope.showCategoryInfo = function(category){
+		$scope.params.currentCategory = category.id;
+		$scope.params.lastDate = "";
+		$scope.params.isHomePage = true;
+		$scope.params.isCategoryPage = false;
+		$scope.params.moreData = false;
+		//populateInfo();
+	};
+	
+	$scope.checkInfoCount = function(){
+		checkCount();
+	};
+	
+	$scope.showInfo = function(info){
+		$ionicPopup.show({
+			title: 'Information',
+			template: info.information,
+		    buttons: [
+		      { text: 'Close' }]
+		});
+	};
+		
 	$scope.loadMore = function(){
 		populateInfo($scope.params.lastDate);
 	};
