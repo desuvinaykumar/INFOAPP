@@ -52,7 +52,6 @@ angular.module('ionicApp', ['ionic'])
 	function populateInfo(){
 		if(!$scope.params.lastDate){
 			$scope.params.items = [];
-			$scope.params.items.push({title:"Loading...",information:""});
 		}
 		$http({method:"POST",
 			url:"/INFOAPP/rest/info/fetch",
