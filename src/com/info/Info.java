@@ -9,6 +9,26 @@ public class Info {
 	private String category;
 	
 	private String datetime;
+	
+	private Integer likes;
+	
+	private Integer dislikes;
+
+	public Integer getLikes() {
+		return likes;
+	}
+
+	public void setLikes(Integer likes) {
+		this.likes = likes;
+	}
+
+	public Integer getDislikes() {
+		return dislikes;
+	}
+
+	public void setDislikes(Integer dislikes) {
+		this.dislikes = dislikes;
+	}
 
 	public String getDatetime() {
 		return datetime;

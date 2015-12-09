@@ -39,7 +39,7 @@ public class InfoController {
 	public @ResponseBody
 	List<Info> fetch(@RequestBody Info info) {
 
-		String sql = "select ta_info_title title, ta_category_desc category, ta_info_info information, DATE_FORMAT(ta_info_date,'%Y%m%d%H%i%s') datetime from ta_info, ta_category ";
+		String sql = "select ta_info_title title, ta_category_desc category, ta_info_info information, DATE_FORMAT(ta_info_date,'%Y%m%d%H%i%s') datetime, ta_info_likes likes, ta_info_dislikes dislikes from ta_info, ta_category ";
 		sql += " where ta_category_id = ta_info_category ";
 		if(info.getCategory()!=null  && !info.getCategory().equals("")){
 			sql += " and ta_info_category = "+info.getCategory()+" ";
@@ -57,6 +57,8 @@ public class InfoController {
 				e.setCategory(rs.getString(2));
 				e.setInformation(rs.getString(3));
 				e.setDatetime(rs.getString(4));
+				e.setLikes(rs.getInt(5));
+				e.setDislikes(rs.getInt(6));
 				return e;  
 			}  
 		});
@@ -103,6 +105,33 @@ public class InfoController {
 			}  
 		});
 		
+	}
+	
+	@RequestMapping(value = "updateLikes", method = RequestMethod.POST)
+	public @ResponseBody
+	Info updateLikes(@RequestBody Info info) {
+
+		String sql = "update ta_info set ta_info_likes = ta_info_likes+1 "
+				+ " where DATE_FORMAT(ta_info_date,'%Y%m%d%H%i%s') = ? and ta_info_title = ? ";
+		
+		jdbcTemplate.update(sql,new Object[] { info.getDatetime(),
+				info.getTitle()
+			});
+		
+		return info;
+	}
+	
+	@RequestMapping(value = "updateDislikes", method = RequestMethod.POST)
+	public @ResponseBody
+	Info updateDislikes(@RequestBody Info info) {
+
+		String sql = "update ta_info set ta_info_dislikes = ta_info_dislikes+1 "
+				+ " where DATE_FORMAT(ta_info_date,'%Y%m%d%H%i%s') = ? and ta_info_title = ? ";
+		
+		jdbcTemplate.update(sql,new Object[] { info.getDatetime(),
+				info.getTitle()
+			});
+		return info;
 	}
 	
 }

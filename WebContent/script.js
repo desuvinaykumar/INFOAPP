@@ -100,6 +100,7 @@ angular.module('ionicApp', ['ionic'])
 		$scope.params.isHomePage = true;
 		$scope.params.isCategoryPage = false;
 		$scope.params.moreData = false;
+		$scope.params.items = [];
 		//populateInfo();
 	};
 	
@@ -113,6 +114,31 @@ angular.module('ionicApp', ['ionic'])
 			template: info.information,
 		    buttons: [
 		      { text: 'Close' }]
+		});
+	};
+	
+	$scope.updateLikes = function(info){
+		info.likes = (Number(info.likes)+1)+"";
+		$http({method:"POST",
+			url:"/INFOAPP/rest/info/updateLikes",
+			data:info}
+		).then(function(response){
+			
+		},function(){
+			
+		});
+	};
+	
+	$scope.updateDislikes = function(info){
+		info.dislikes = (Number(info.dislikes)+1)+"";
+		
+		$http({method:"POST",
+			url:"/INFOAPP/rest/info/updateDislikes",
+			data:info}
+		).then(function(response){
+			
+		},function(){
+			
 		});
 	};
 		

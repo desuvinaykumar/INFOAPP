@@ -16,37 +16,37 @@
 
 <body ng-controller="MyCtrl">
 
-  <ion-header-bar class="bar-positive">
-  	<button class="button icon ion-home" ng-click="showHomePage()"></button>
-  	<button class="button icon ion-navicon" ng-click="showCategoryPage()"></button>
-    <h1 class="title">{{myTitle}}</h1>
-	<button class="button button-icon-small icon-right ion-information-circled" ng-click="doSomething()">
-    Post
-    </button>
-  </ion-header-bar>
-  <ion-content ng-show="params.isCategoryPage">
-  		<h3>Choose category for information</h3>
-  		<div class="list">
-	      <div class="item" ng-repeat="category in params.categoryList" ng-click=showCategoryInfo(category)>
-	      <h2>{{category.desc}}</h2>
-		  </div>
-	  </div>
-  </ion-content>
-  <ion-content ng-show="params.isHomePage">
-	  <div class="list">
-	      <div class="item" ng-repeat="item in params.items" ng-click=showInfo(item)>
-	      <span class="item-note">
-		      {{item.category}}
-		    </span>
-	    	<h2>{{item.title}}</h2>
-	    	<p>{{item.information}}</p>
-	    	
-		  </div>
-	  </div>
-	  <ion-infinite-scroll distance="1%"
-	    on-infinite="loadMore()" 
-	    ng-if="!params.moreData">
-	  </ion-infinite-scroll>
+	<ion-header-bar class="bar-positive">
+		<button class="button icon ion-home" ng-click="showHomePage()"></button>
+	 	<button class="button icon ion-navicon" ng-click="showCategoryPage()"></button>
+	   	<h1 class="title">{{myTitle}}</h1>
+		<button class="button button-icon-small icon-right ion-information-circled" ng-click="doSomething()">Post</button>
+	</ion-header-bar>
+  
+	<ion-content ng-show="params.isCategoryPage">
+		<h4>Choose category for information</h4>
+		<div class="list list-inset">
+			<div class="item" ng-repeat="category in params.categoryList" ng-click=showCategoryInfo(category)>
+				<h2>{{category.desc}}</h2>
+			</div>
+		</div>
+	</ion-content>
+	
+	<ion-content ng-show="params.isHomePage">
+		<div class="list">
+			<div class="item" ng-repeat="item in params.items">
+				<div class="row" style="padding:0px;">
+  					<div class="col col-85" style="cursor:pointer" ng-click=showInfo(item)>
+						<span class="item-note">{{item.category}}</span>
+						<h2>{{item.title}}</h2>
+						<p>{{item.information}}</p>
+					</div>
+					<div class="col"><button class="button-small button-clear icon ion-thumbsup" ng-click=updateLikes(item)><span style="margin-left: 3px;">{{item.likes}}</span></button>
+					<br/><button class="button-small button-clear icon ion-thumbsdown" ng-click=updateDislikes(item)><span style="margin-left: 3px;">{{item.dislikes}}</span></button></div>
+				</div>
+			</div>
+		</div>
+		<ion-infinite-scroll distance="1%" on-infinite="loadMore()" ng-if="!params.moreData"></ion-infinite-scroll>
 	</ion-content>
 </body>
 
