@@ -8794,7 +8794,9 @@ a.button {
       margin-bottom: 15px;
       margin-left: 0;
       max-width: 100%;
-      width: 100%; } }
+      width: 100%; } 
+
+}
 
 @media (max-width: 767px) {
   .responsive-md {
@@ -9318,4 +9320,9 @@ a.button {
 .item .badge{
 	position : initial;
 	float : right;
+}
+
+.infoWidth{
+	display: inline-block;
+    width: 75%;
 }

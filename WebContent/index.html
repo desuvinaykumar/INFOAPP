@@ -35,9 +35,10 @@
 	<ion-content ng-show="params.isHomePage">
 		<div class="list">
 			<div class="item" ng-repeat="item in params.items" ng-click=showInfo(item)>
-				<span class="badge badge-success" ng-click="updateLikes(item, $event)"><i class="icon ion-thumbsup" style="margin-right:4px"></i>{{item.likes}}</span><span class="badge badge-assertive" ng-click="updateDislikes(item, $event)"><i class="icon ion-thumbsdown" style="margin-right:4px"></i>{{item.dislikes}}</span><span class="item-note">{{item.category}}</span>
+				<span class="item-note">{{item.category}}</span>
 				<h2>{{item.title}}</h2>
-				<p>{{item.information}}</p>
+				<p class="infoWidth">{{item.information}}</p>
+				<span class="badge badge-success" ng-click="updateLikes(item, $event)"><i class="icon ion-thumbsup" style="margin-right:4px"></i>{{item.likes}}</span><span class="badge badge-assertive" ng-click="updateDislikes(item, $event)"><i class="icon ion-thumbsdown" style="margin-right:4px"></i>{{item.dislikes}}</span>
 			</div>
 		</div>
 		<ion-infinite-scroll distance="1%" on-infinite="loadMore()" ng-if="!params.moreData"></ion-infinite-scroll>
