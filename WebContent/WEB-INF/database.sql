@@ -39,7 +39,10 @@ insert into `ta_category`(`ta_category_id`,`ta_category_desc`) values ( '2','Rec
 insert into `ta_category`(`ta_category_id`,`ta_category_desc`) values ( '3','Shopping');
 update `ta_category` set `ta_category_id`='2',`ta_category_desc`='Recharge' where `ta_category_id`='2' and `ta_category_desc`='Recharge Offer';
 insert into `ta_category`(`ta_category_id`,`ta_category_desc`) values ( '4','Traffic');
-insert into `ta_category`(`ta_category_id`,`ta_category_desc`) values ( '5','Other');
+insert into `ta_category`(`ta_category_id`,`ta_category_desc`) values ( '5','Cooking');
+insert into `ta_category`(`ta_category_id`,`ta_category_desc`) values ( '6','Restaurants');
+insert into `ta_category`(`ta_category_id`,`ta_category_desc`) values ( '7','Temples');
+insert into `ta_category`(`ta_category_id`,`ta_category_desc`) values ( '999','Other');
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
