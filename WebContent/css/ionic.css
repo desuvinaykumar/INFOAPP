@@ -9320,6 +9320,9 @@ a.button {
 .item .badge{
 	position : initial;
 	float : right;
+	padding: 2px 5px;
+	font-size: 10px;
+    line-height: 13px
 }
 
 .infoWidth{
