@@ -6729,6 +6729,11 @@ button.item.item-button-right {
 .badge.badge-positive {
   background-color: #387ef5;
   color: #fff; }
+  
+.tabs .tab-item .badge.badge-success,
+.badge.badge-success {
+  background-color: green;
+  color: #fff; }
 
 .tabs .tab-item .badge.badge-calm,
 .badge.badge-calm {
@@ -9308,4 +9313,9 @@ a.button {
 
 .item{
 	padding : 10px;
+}
+
+.item .badge{
+	position : initial;
+	float : right;
 }

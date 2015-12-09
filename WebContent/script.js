@@ -117,7 +117,8 @@ angular.module('ionicApp', ['ionic'])
 		});
 	};
 	
-	$scope.updateLikes = function(info){
+	$scope.updateLikes = function(info, $event){
+		$event.stopPropagation();
 		info.likes = (Number(info.likes)+1)+"";
 		$http({method:"POST",
 			url:"/INFOAPP/rest/info/updateLikes",
@@ -129,7 +130,8 @@ angular.module('ionicApp', ['ionic'])
 		});
 	};
 	
-	$scope.updateDislikes = function(info){
+	$scope.updateDislikes = function(info, $event){
+		$event.stopPropagation();
 		info.dislikes = (Number(info.dislikes)+1)+"";
 		
 		$http({method:"POST",
