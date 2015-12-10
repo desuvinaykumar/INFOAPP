@@ -13,6 +13,16 @@ public class Info {
 	private Integer likes;
 	
 	private Integer dislikes;
+	
+	private String timeElapsed;
+
+	public String getTimeElapsed() {
+		return timeElapsed;
+	}
+
+	public void setTimeElapsed(String timeElapsed) {
+		this.timeElapsed = timeElapsed;
+	}
 
 	public Integer getLikes() {
 		return likes;
