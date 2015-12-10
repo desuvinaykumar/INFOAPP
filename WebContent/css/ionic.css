@@ -9329,3 +9329,29 @@ a.button {
 	display: inline-block;
     width: 50%;
 }
+
+.elapsedTime{
+	color : gray;
+	font-size: 9px;
+    line-height: 11px;
+    vertical-align: top;
+}
+
+.noBorders{
+	border: none;
+}
+
+.item-footer{
+	padding-bottom: 0px;
+    padding-top: 5px;
+    background-color: #fafafa;
+}
+
+.item-header{
+	padding-bottom: 5px;
+    padding-top: 5px;
+}
+
+.item-header h2{
+	font-weight: 600;
+}
