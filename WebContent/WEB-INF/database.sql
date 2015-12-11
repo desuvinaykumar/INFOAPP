@@ -29,6 +29,7 @@ CREATE TABLE `ta_info` (
 
 alter table `ta_info` change `ta_info_category` `ta_info_category` numeric(3) NOT NULL;
 alter table `ta_info` add column `ta_info_likes` numeric(9) DEFAULT '0' NULL after `ta_info_date`, add column `ta_info_dislikes` numeric(9) DEFAULT '0' NULL after `ta_info_likes`;
+alter table `ta_info` add column `ta_info_createddate` timestamp NULL after `ta_info_dislikes`;
 
 DROP TABLE IF EXISTS `ta_category`;
 

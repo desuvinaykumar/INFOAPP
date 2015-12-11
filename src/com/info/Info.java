@@ -15,6 +15,16 @@ public class Info {
 	private Integer dislikes;
 	
 	private String timeElapsed;
+	
+	private String createdDate;
+
+	public String getCreatedDate() {
+		return createdDate;
+	}
+
+	public void setCreatedDate(String createdDate) {
+		this.createdDate = createdDate;
+	}
 
 	public String getTimeElapsed() {
 		return timeElapsed;

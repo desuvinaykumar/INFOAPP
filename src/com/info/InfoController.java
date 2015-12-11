@@ -25,7 +25,7 @@ public class InfoController {
 	Info create(@RequestBody Info info) {
 
 		String sql = "INSERT INTO ta_info " +
-				"(ta_info_title, ta_info_category, ta_info_info) VALUES (?, ?, ?)";
+				"(ta_info_title, ta_info_category, ta_info_info, ta_info_createddate) VALUES (?, ?, ?, current_timestamp)";
 		
 		jdbcTemplate.update(sql, new Object[] { info.getTitle(),
 				info.getCategory(), info.getInformation()  
@@ -39,29 +39,7 @@ public class InfoController {
 	public @ResponseBody
 	List<Info> pullToRefresh(@RequestBody Info info) {
 
-		String sql = "select ta_info_title title, ta_category_desc category, ta_info_info information, DATE_FORMAT(ta_info_date,'%Y%m%d%H%i%s') datetime, ta_info_likes likes, ta_info_dislikes dislikes from ta_info, ta_category ";
-		sql += " where ta_category_id = ta_info_category ";
-		if(info.getCategory()!=null  && !info.getCategory().equals("")){
-			sql += " and ta_info_category = "+info.getCategory()+" ";
-		}
-		if(info.getDatetime()!=null && !info.getDatetime().equals("")){
-			sql += " and DATE_FORMAT(ta_info_date,'%Y%m%d%H%i%s') > convert('"+info.getDatetime()+"', unsigned integer)";
-		}
-			sql += " order by datetime desc limit 5";
-		
-		return jdbcTemplate.query(sql, new RowMapper<Info>(){
-			@Override  
-			public Info mapRow(ResultSet rs, int rownumber) throws SQLException {  
-				Info e=new Info();  
-				e.setTitle(rs.getString(1));
-				e.setCategory(rs.getString(2));
-				e.setInformation(rs.getString(3));
-				e.setDatetime(rs.getString(4));
-				e.setLikes(rs.getInt(5));
-				e.setDislikes(rs.getInt(6));
-				return e;  
-			}  
-		});
+		return this.getData(info, true);
 		
 	}
 	
@@ -69,13 +47,25 @@ public class InfoController {
 	public @ResponseBody
 	List<Info> fetch(@RequestBody Info info) {
 
-		String sql = "select ta_info_title title, ta_category_desc category, ta_info_info information, DATE_FORMAT(ta_info_date,'%Y%m%d%H%i%s') datetime, ta_info_likes likes, ta_info_dislikes dislikes, DATE_FORMAT(current_timestamp,'%Y%m%d%H%i%s') from ta_info, ta_category ";
+		return this.getData(info, false);
+	}
+	
+	public List<Info> getData(Info info, boolean requireNewData){
+		
+		String sql = "select ta_info_title title, ta_category_desc category, ta_info_info information, DATE_FORMAT(ta_info_date,'%Y%m%d%H%i%s') datetime, "
+				+ " ta_info_likes likes, ta_info_dislikes dislikes, DATE_FORMAT(current_timestamp,'%Y%m%d%H%i%s'), DATE_FORMAT(ta_info_createddate,'%Y%m%d%H%i%s') createdDate "
+				+ " from ta_info, ta_category ";
 		sql += " where ta_category_id = ta_info_category ";
 		if(info.getCategory()!=null  && !info.getCategory().equals("")){
 			sql += " and ta_info_category = "+info.getCategory()+" ";
 		}
 		if(info.getDatetime()!=null && !info.getDatetime().equals("")){
-			sql += " and DATE_FORMAT(ta_info_date,'%Y%m%d%H%i%s') < convert('"+info.getDatetime()+"', unsigned integer)";
+			if(requireNewData){
+				sql += " and DATE_FORMAT(ta_info_date,'%Y%m%d%H%i%s') > convert('"+info.getDatetime()+"', unsigned integer)";
+			}else{
+				sql += " and DATE_FORMAT(ta_info_date,'%Y%m%d%H%i%s') < convert('"+info.getDatetime()+"', unsigned integer)";
+			}
+			
 		}
 			sql += " order by datetime desc limit 5";
 		
@@ -90,10 +80,10 @@ public class InfoController {
 				e.setLikes(rs.getInt(5));
 				e.setDislikes(rs.getInt(6));
 				e.setTimeElapsed(Utilities.elapsedTime(rs.getString(4), rs.getString(7)));
+				e.setCreatedDate(rs.getString(8));
 				return e;  
 			}  
 		});
-		
 	}
 	
 	@RequestMapping(value = "count", method = RequestMethod.POST)
@@ -143,9 +133,9 @@ public class InfoController {
 	Info updateLikes(@RequestBody Info info) {
 
 		String sql = "update ta_info set ta_info_likes = ta_info_likes+1 "
-				+ " where DATE_FORMAT(ta_info_date,'%Y%m%d%H%i%s') = ? and ta_info_title = ? ";
+				+ " where DATE_FORMAT(ta_info_createddate,'%Y%m%d%H%i%s') = ? and ta_info_title = ? ";
 		
-		jdbcTemplate.update(sql,new Object[] { info.getDatetime(),
+		jdbcTemplate.update(sql,new Object[] { info.getCreatedDate(),
 				info.getTitle()
 			});
 		
@@ -157,9 +147,9 @@ public class InfoController {
 	Info updateDislikes(@RequestBody Info info) {
 
 		String sql = "update ta_info set ta_info_dislikes = ta_info_dislikes+1 "
-				+ " where DATE_FORMAT(ta_info_date,'%Y%m%d%H%i%s') = ? and ta_info_title = ? ";
+				+ " where DATE_FORMAT(ta_info_createddate,'%Y%m%d%H%i%s') = ? and ta_info_title = ? ";
 		
-		jdbcTemplate.update(sql,new Object[] { info.getDatetime(),
+		jdbcTemplate.update(sql,new Object[] { info.getCreatedDate(),
 				info.getTitle()
 			});
 		return info;
