@@ -81,6 +81,13 @@ angular.module('ionicApp', ['ionic'])
 		});
 	}
 	
+	$scope.aboutInfoApp = function(){
+		$ionicPopup.alert({
+		     title: 'About us',
+		     template: '<div style="text-align:center;">A platform to share information from you and for you. <br/><br/> For any suggestions, please mail us at <a href="mailto:contact@jantakhabar.com">contact@jantakhabar.com</a></div>'
+		   });
+	};
+	
 	//populateInfo();
 	$scope.showHomePage = function(){
 		$scope.params.isHomePage = true;
