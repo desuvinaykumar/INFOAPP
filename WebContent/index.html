@@ -1,7 +1,9 @@
 <!DOCTYPE html>
 <html ng-app="ionicApp">
 <head>
-
+<link rel="icon" 
+      type="image/png" 
+      href="css/images/ic_launcher.png" />
   <meta charset="utf-8">
   <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width">
 
@@ -19,7 +21,7 @@
 	<ion-header-bar class="bar-positive">
 		<button class="button icon ion-home" ng-click="showHomePage()"></button>
 	 	<button class="button icon ion-navicon" ng-click="showCategoryPage()"></button>
-	   	<h1 class="title">{{myTitle}}</h1>
+	   	<h1 class="title" ng-click="aboutInfoApp()">{{myTitle}}</h1>
 		<button class="button button-icon-small icon-right ion-information-circled" ng-click="doSomething()">Post</button>
 	</ion-header-bar>
   
