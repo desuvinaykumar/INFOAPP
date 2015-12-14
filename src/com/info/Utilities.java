@@ -52,7 +52,11 @@ public class Utilities {
 					sb.append("s");
 				}
 			}
-			sb.append(" ago.");
+			if(sb.length() == 0){
+				sb.append("Just now");
+			}else{
+				sb.append(" ago.");				
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
