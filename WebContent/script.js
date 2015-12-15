@@ -1,6 +1,6 @@
 angular.module('ionicApp', ['ionic'])
 
-.controller('MyCtrl', function($scope, $ionicModal, $http, $ionicPopup, $ionicLoading) {
+.controller('MyCtrl', function($scope, $ionicModal, $http, $ionicPopup, $ionicLoading, $ionicSideMenuDelegate,$ionicScrollDelegate) {
 	$scope.myTitle = 'Any Information!!!';
 
 	$scope.params={};
@@ -15,8 +15,9 @@ angular.module('ionicApp', ['ionic'])
 	$scope.params.categoryList = [];
 	$scope.params.isHomePage = true;
 	$scope.params.isCategoryPage = false;
+	$scope.params.sideMenuList = [];
 	
-	fetchCategoryList();
+	fetchMenuList();
 	
 	function resetToHome(){
 		$scope.params.items = [];
@@ -24,6 +25,17 @@ angular.module('ionicApp', ['ionic'])
 		$scope.params.lastDate = "";
 		$scope.params.moreData = false;
 		//populateInfo();
+	}
+	
+	function fetchMenuList(){
+		$http({method:"POST",
+			url:"/INFOAPP/rest/menu/get"}
+		).then(function(response){
+			$scope.params.sideMenuList = response.data;
+			fetchCategoryList();
+		},function(response){
+			
+		});
 	}
 	
 	function fetchCategoryList(){
@@ -81,23 +93,43 @@ angular.module('ionicApp', ['ionic'])
 		});
 	}
 	
-	$scope.aboutInfoApp = function(){
+	/*$scope.aboutInfoApp = function(){
 		$ionicPopup.alert({
 		     title: 'About us',
 		     template: '<div style="text-align:center;">A platform to share information from you and for you. <br/><br/> For any suggestions, please mail us at <a href="mailto:contact@jantakhabar.com">contact@jantakhabar.com</a></div>'
 		   });
-	};
+	};*/
 	
 	//populateInfo();
 	$scope.showHomePage = function(){
 		$scope.params.isHomePage = true;
 		$scope.params.isCategoryPage = false;
 		resetToHome();
+		$ionicScrollDelegate.scrollTop();
 	};
 	
-	$scope.showCategoryPage = function(){
-		$scope.params.isHomePage = false;
-		$scope.params.isCategoryPage = true;
+	$scope.showMenu = function(){
+		$ionicSideMenuDelegate.toggleLeft();
+	};
+	
+	$scope.showMenuPage = function(menuItem){
+		$ionicSideMenuDelegate.toggleLeft();
+		if(menuItem.id == "1"){
+			$scope.params.isHomePage = false;
+			$scope.params.isCategoryPage = true;
+		}
+		if(menuItem.id == "2"){
+			$ionicPopup.alert({
+			     title: 'About',
+			     template: '<div style="text-align:center;">A platform to share information from you and for you.</div>'
+			   });
+		}
+		if(menuItem.id == "3"){
+			$ionicPopup.alert({
+			     title: 'Contact Us',
+			     template: '<div style="text-align:center;">For any suggestions or any other information, please mail us at <a href="mailto:contact@jantakhabar.com">contact@jantakhabar.com</a></div>'
+			   });
+		}
 	};
 	
 	$scope.showCategoryInfo = function(category){
@@ -108,6 +140,7 @@ angular.module('ionicApp', ['ionic'])
 		$scope.params.moreData = false;
 		$scope.params.items = [];
 		//populateInfo();
+		$ionicScrollDelegate.scrollTop();
 	};
 	
 	$scope.checkInfoCount = function(){
@@ -188,7 +221,7 @@ angular.module('ionicApp', ['ionic'])
 		$scope.modal.hide();
 		$scope.modal.remove();
 		$ionicLoading.show({
-			template: 'Posting info...'
+			template: '<ion-spinner icon="spiral"></ion-spinner> Posting info...'
 		});
 	};
 
@@ -202,7 +235,7 @@ angular.module('ionicApp', ['ionic'])
 		$scope.params.infoTitle = '';
 		$scope.params.infoCategory = '';
 		$scope.params.information = '';
-		$ionicModal.fromTemplateUrl('my-modal.html', {
+		$ionicModal.fromTemplateUrl('post.html', {
 			scope: $scope,
 			backdropClickToClose:false,
 			hardwareBackButtonClose:false,

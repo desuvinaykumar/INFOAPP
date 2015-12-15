@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.info.util.Utilities;
+
 @Controller
 @RequestMapping("/info")
 public class InfoController {
@@ -59,13 +61,29 @@ public class InfoController {
 		if(info.getCategory()!=null  && !info.getCategory().equals("")){
 			sql += " and ta_info_category = "+info.getCategory()+" ";
 		}
+		String title = info.getTitle();
+		String information = info.getInformation();
+		if((title!=null && !title.equals("")) || (information!=null && !information.equals(""))){
+			sql += " and (";
+			boolean addOrr = false;
+			if(title!=null && !title.equals("")){
+				sql += " insrt(lower(ta_info_title), lower('"+title+"')) >= 0 ";
+				addOrr = true;
+			}
+			if(information!=null && !information.equals("")){
+				if(addOrr){
+					sql += " or ";
+				}
+				sql += " insrt(lower(ta_info_info), lower('"+information+"')) >= 0 ";
+			}
+			sql += ") ";
+		}
 		if(info.getDatetime()!=null && !info.getDatetime().equals("")){
 			if(requireNewData){
 				sql += " and DATE_FORMAT(ta_info_date,'%Y%m%d%H%i%s') > convert('"+info.getDatetime()+"', unsigned integer)";
 			}else{
 				sql += " and DATE_FORMAT(ta_info_date,'%Y%m%d%H%i%s') < convert('"+info.getDatetime()+"', unsigned integer)";
 			}
-			
 		}
 			sql += " order by datetime desc limit 5";
 		

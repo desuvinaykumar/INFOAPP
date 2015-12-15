@@ -45,5 +45,16 @@ insert into `ta_category`(`ta_category_id`,`ta_category_desc`) values ( '6','Res
 insert into `ta_category`(`ta_category_id`,`ta_category_desc`) values ( '7','Temples');
 insert into `ta_category`(`ta_category_id`,`ta_category_desc`) values ( '999','Other');
 
+DROP TABLE IF EXISTS `ta_menu`;
+
+CREATE TABLE `ta_menu` (
+  `ta_menu_id` decimal(9,0) default NULL,
+  `ta_menu_desc` varchar(20) default NULL,
+  `ta_menu_seq` decimal(9,1) default NULL
+);
+/*Data for the table `ta_menu` */
+
+insert  into `ta_menu`(`ta_menu_id`,`ta_menu_desc`,`ta_menu_seq`) values ('1','Category','1.0'),('2','About','2.0'),('3','Contact US','3.0'),('4','Search Information','1.1');
+
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
