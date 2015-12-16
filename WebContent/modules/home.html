@@ -1,6 +1,8 @@
 <ion-view>
 	<ion-content delegate-handle="info" id="homePage">
 		<div>
+		<ion-refresher pulling-text="Pull to refresh..."  on-refresh="doRefresh()">
+		  </ion-refresher>
 			<div class="list card" ng-repeat="item in params.items" ng-click=showInfo(item)>
 				<div class="item item-header myitem">
 				<span class="item-note">{{item.category}}</span>
