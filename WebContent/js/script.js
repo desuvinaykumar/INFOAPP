@@ -143,7 +143,7 @@ angular.module('ionicApp')
 			url:"/INFOAPP/rest/info/updateLikes",
 			data:info}
 		).then(function(response){
-			
+			localCreatedData[response.data.createdDate] = true;
 		},function(){
 			
 		});
@@ -157,7 +157,7 @@ angular.module('ionicApp')
 			url:"/INFOAPP/rest/info/updateDislikes",
 			data:info}
 		).then(function(response){
-			
+			localCreatedData[response.data.createdDate] = true;
 		},function(){
 			
 		});
