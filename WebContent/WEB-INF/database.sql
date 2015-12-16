@@ -56,5 +56,13 @@ CREATE TABLE `ta_menu` (
 
 insert  into `ta_menu`(`ta_menu_id`,`ta_menu_desc`,`ta_menu_seq`) values ('1','Category','1.0'),('2','About','2.0'),('3','Contact US','3.0'),('4','Search Information','1.1');
 
+alter table `ta_menu` add column `ta_menu_code` varchar(20) NULL after `ta_menu_seq`;
+
+update `ta_menu` set `ta_menu_id`='1',`ta_menu_desc`='Category',`ta_menu_seq`='1.0',`ta_menu_code`='categories' where `ta_menu_id`='1' and `ta_menu_desc`='Category' and `ta_menu_seq`='1.0' and `ta_menu_code` IS NULL;
+update `ta_menu` set `ta_menu_id`='2',`ta_menu_desc`='About',`ta_menu_seq`='2.0',`ta_menu_code`='about' where `ta_menu_id`='2' and `ta_menu_desc`='About' and `ta_menu_seq`='2.0' and `ta_menu_code` IS NULL;
+update `ta_menu` set `ta_menu_id`='3',`ta_menu_desc`='Contact US',`ta_menu_seq`='3.0',`ta_menu_code`='contactus' where `ta_menu_id`='3' and `ta_menu_desc`='Contact US' and `ta_menu_seq`='3.0' and `ta_menu_code` IS NULL;
+update `ta_menu` set `ta_menu_id`='4',`ta_menu_desc`='Search Information',`ta_menu_seq`='1.1',`ta_menu_code`='searchinfo' where `ta_menu_id`='4' and `ta_menu_desc`='Search Information' and `ta_menu_seq`='1.1' and `ta_menu_code` IS NULL;
+
+
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
