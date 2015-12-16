@@ -10,6 +10,7 @@ angular.module('ionicApp')
 	$scope.modal = null;
 	$scope.params.currentCategory = "";
 	$scope.params.lastDate = "";
+	$scope.params.lastRefreshDate = "";
 	$scope.params.moreData = false;
 	$scope.params.categoryList = [];
 	$scope.params.sideMenuList = [];
@@ -21,6 +22,7 @@ angular.module('ionicApp')
 		$scope.params.items = [];
 		$scope.params.currentCategory = "";
 		$scope.params.lastDate = "";
+		$scope.params.lastRefreshDate = "";
 		$scope.params.moreData = false;
 		//populateInfo();
 	}
@@ -59,6 +61,8 @@ angular.module('ionicApp')
 		});
 	}
 	
+	
+	
 	function populateInfo(){
 		if(!$scope.params.lastDate){
 			$scope.params.items = [];
@@ -68,18 +72,16 @@ angular.module('ionicApp')
 			data:{category:$scope.params.currentCategory, datetime:$scope.params.lastDate}}
 		).then(function(response){
 			var data = response.data;
-			if(data){
+			if(data && data.length!=0){
 				if(!$scope.params.lastDate){
 					$scope.params.items = [];
+				}
+				if(!$scope.params.lastRefreshDate){
+					$scope.params.lastRefreshDate = data[0].datetime;
 				}
 				for(var temp in data){
 					$scope.params.items.push(data[temp]);
 					$scope.params.lastDate = data[temp].datetime;
-				}
-			}else{
-				if(!$scope.params.lastDate){	
-					$scope.params.items = [];
-					$scope.params.items.push({title:"No Information available",information:""});
 				}
 			}
 			checkCount();
@@ -90,13 +92,6 @@ angular.module('ionicApp')
 			});
 		});
 	}
-	
-	/*$scope.aboutInfoApp = function(){
-		$ionicPopup.alert({
-		     title: 'About us',
-		     template: '<div style="text-align:center;">A platform to share information from you and for you. <br/><br/> For any suggestions, please mail us at <a href="mailto:contact@jantakhabar.com">contact@jantakhabar.com</a></div>'
-		   });
-	};*/
 	
 	//populateInfo();
 	$scope.showHomePage = function(){
@@ -166,6 +161,28 @@ angular.module('ionicApp')
 		
 	$scope.loadMore = function(){
 		populateInfo($scope.params.lastDate);
+	};
+	
+	$scope.doRefresh = function(){
+		
+		$http({method:"POST",
+			url:"/INFOAPP/rest/info/pullToRefresh",
+			data:{category:$scope.params.currentCategory, datetime:$scope.params.lastRefreshDate}}
+		).then(function(response){
+			var data = response.data;
+			if(data){
+				for(var temp in data){
+					$scope.params.items.splice(0,0,data[temp]);
+					$scope.params.lastRefreshDate = data[temp].datetime;
+				}
+			}
+			$scope.$broadcast('scroll.refreshComplete');
+		},function(response){
+			$ionicPopup.alert({
+				template: 'Error fetching the Information'
+			});
+		});
+		
 	};
 	
 	$scope.scrollToTop = function(){
