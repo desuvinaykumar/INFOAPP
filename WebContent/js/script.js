@@ -176,7 +176,7 @@ angular.module('ionicApp')
 			var data = response.data;
 			if(data){
 				for(var temp in data){
-					if(!localCreatedData[data[temp].datetime]){
+					if(!localCreatedData[data[temp].createdDate]){
 						$scope.params.items.splice(0,0,data[temp]);	
 					}
 					
@@ -218,7 +218,7 @@ angular.module('ionicApp')
 			}else{
 				$scope.params.items.splice(0,0,data);
 			}
-			localCreatedData[data.datetime] = true;
+			localCreatedData[data.createdDate] = true;
 		},function(){
 			$ionicLoading.hide();
 			$ionicLoading.show({
