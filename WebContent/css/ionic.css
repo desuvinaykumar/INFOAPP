@@ -9357,3 +9357,28 @@ a.button {
 .item-header h2{
 	font-weight: 600;
 }
+
+
+.fabButton { 
+	bottom: 7%;
+	right: 7%;
+  position: fixed; 
+  z-index: 999;
+  -moz-border-radius: 20px;
+    -webkit-border-radius: 20px;
+    -khtml-border-radius: 20px;
+    border-radius: 20px;
+    background-color: blue;
+    cursor : pointer;
+}
+
+.fabButton span { 
+  display: block; 
+  padding: 8px 13px;
+  color: #fff; 
+  font-family: Arial, sans-serif; 
+  font-size: 17px; 
+  font-weight: bold; 
+  text-decoration: none; 
+}
+
