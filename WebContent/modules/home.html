@@ -1,0 +1,23 @@
+<ion-view>
+	<ion-content delegate-handle="info" id="homePage">
+		<div>
+			<div class="list card" ng-repeat="item in params.items" ng-click=showInfo(item)>
+				<div class="item item-header myitem">
+				<span class="item-note">{{item.category}}</span>
+			    	<h2>{{item.title}}</h2>
+			  	</div>
+			  	<div class="item noBorders  myitem">
+			  		<p>{{item.information}}</p>
+			  	</div>
+			  	<div class="item item-footer noBorders myitem">
+			  		<p><span class="elapsedTime">{{item.timeElapsed}}</span><span class="badge badge-success" ng-click="updateLikes(item, $event)"><i class="icon ion-thumbsup" style="margin-right:4px"></i>{{item.likes}}</span><span class="badge badge-assertive" ng-click="updateDislikes(item, $event)"><i class="icon ion-thumbsdown" style="margin-right:4px"></i>{{item.dislikes}}</span></p>
+			  	</div>
+			</div>
+			<ion-infinite-scroll distance="1%" on-infinite="loadMore()" ng-if="!params.moreData"></ion-infinite-scroll>
+		</div>
+		
+	</ion-content>
+	<div class="fabButton" ng-click="scrollToTop()">
+	  <span href=""><i class="icon ion-arrow-up-b"></i></span>
+	</div>
+</ion-view>

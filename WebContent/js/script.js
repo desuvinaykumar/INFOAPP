@@ -1,6 +1,5 @@
-angular.module('ionicApp', ['ionic'])
-
-.controller('MyCtrl', function($scope, $ionicModal, $http, $ionicPopup, $ionicLoading, $ionicSideMenuDelegate,$ionicScrollDelegate) {
+angular.module('ionicApp')
+.controller('MyCtrl', function($scope, $ionicModal, $http, $ionicPopup, $ionicLoading, $ionicSideMenuDelegate,$ionicScrollDelegate, $state, $ionicHistory) {
 	$scope.myTitle = 'Any Information!!!';
 
 	$scope.params={};
@@ -13,9 +12,8 @@ angular.module('ionicApp', ['ionic'])
 	$scope.params.lastDate = "";
 	$scope.params.moreData = false;
 	$scope.params.categoryList = [];
-	$scope.params.isHomePage = true;
-	$scope.params.isCategoryPage = false;
 	$scope.params.sideMenuList = [];
+	$scope.params.showPostInfo = true;
 	
 	fetchMenuList();
 	
@@ -43,6 +41,7 @@ angular.module('ionicApp', ['ionic'])
 			url:"/INFOAPP/rest/info/categoryList"}
 		).then(function(response){
 			$scope.params.categoryList = response.data;
+			$state.go("index");
 		},function(response){
 			
 		});
@@ -55,7 +54,6 @@ angular.module('ionicApp', ['ionic'])
 		).then(function(response){
 			var data = response.data;
 			$scope.params.moreData = parseInt(data.no)?false:true;
-			console.log($scope.params.moreData);
 		},function(response){
 			
 		});
@@ -102,10 +100,9 @@ angular.module('ionicApp', ['ionic'])
 	
 	//populateInfo();
 	$scope.showHomePage = function(){
-		$scope.params.isHomePage = true;
-		$scope.params.isCategoryPage = false;
 		resetToHome();
 		$ionicScrollDelegate.scrollTop(true);
+		$state.go("index");
 	};
 	
 	$scope.showMenu = function(){
@@ -114,33 +111,17 @@ angular.module('ionicApp', ['ionic'])
 	
 	$scope.showMenuPage = function(menuItem){
 		$ionicSideMenuDelegate.toggleLeft();
-		if(menuItem.id == "1"){
-			$scope.params.isHomePage = false;
-			$scope.params.isCategoryPage = true;
-		}
-		if(menuItem.id == "2"){
-			$ionicPopup.alert({
-			     title: 'About',
-			     template: '<div style="text-align:center;">A platform to share information from you and for you.</div>'
-			   });
-		}
-		if(menuItem.id == "3"){
-			$ionicPopup.alert({
-			     title: 'Contact Us',
-			     template: '<div style="text-align:center;">For any suggestions or any other information, please mail us at <a href="mailto:contact@jantakhabar.com">contact@jantakhabar.com</a></div>'
-			   });
-		}
+		$state.go(menuItem.code);
 	};
 	
 	$scope.showCategoryInfo = function(category){
 		$scope.params.currentCategory = category.id;
 		$scope.params.lastDate = "";
-		$scope.params.isHomePage = true;
-		$scope.params.isCategoryPage = false;
 		$scope.params.moreData = false;
 		$scope.params.items = [];
 		//populateInfo();
 		$ionicScrollDelegate.scrollTop(true);
+		$state.go("index");
 	};
 	
 	$scope.checkInfoCount = function(){
@@ -239,7 +220,7 @@ angular.module('ionicApp', ['ionic'])
 		$scope.params.infoTitle = '';
 		$scope.params.infoCategory = '';
 		$scope.params.information = '';
-		$ionicModal.fromTemplateUrl('post.html', {
+		$ionicModal.fromTemplateUrl('modules/post.html', {
 			scope: $scope,
 			backdropClickToClose:false,
 			hardwareBackButtonClose:false,
@@ -251,6 +232,17 @@ angular.module('ionicApp', ['ionic'])
 
 	};
 
+	$scope.$on('$ionicView.afterEnter', function(){
+		setTimeout(function() {
+			$ionicScrollDelegate.scrollTop(true);
+		},0);
+		if($ionicHistory.currentStateName() == "index"){
+			$scope.params.showPostInfo = true;
+		}else{
+			$scope.params.showPostInfo = false;
+		}
+	});
+	
 	//Cleanup the modal when we're done with it!
 	$scope.$on('$destroy', function() {
 		$scope.modal.remove();

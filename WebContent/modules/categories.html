@@ -1,0 +1,10 @@
+<ion-view>
+	<ion-content>
+		<h4>Choose category for information</h4>
+		<div class="list list-inset">
+			<div class="item myitem" ng-repeat="category in params.categoryList" ng-click=showCategoryInfo(category)>
+				<h2>{{category.desc}}</h2>
+			</div>
+		</div>
+	</ion-content>
+</ion-view>

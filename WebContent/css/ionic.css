@@ -9315,7 +9315,7 @@ a.button {
   width:75%;
 }
 
-.item{
+.item.myitem{
 	padding : 10px;
 }
 
@@ -9343,13 +9343,13 @@ a.button {
 	border: none;
 }
 
-.item-footer{
+.myitem.item-footer{
 	padding-bottom: 0px;
     padding-top: 5px;
     background-color: #fafafa;
 }
 
-.item-header{
+.myitem.item-header{
 	padding-bottom: 5px;
     padding-top: 5px;
 }
@@ -9380,5 +9380,12 @@ a.button {
   font-size: 17px; 
   font-weight: bold; 
   text-decoration: none; 
+}
+
+.noRoundCorners{
+	-moz-border-radius: 0px !important;
+    -webkit-border-radius: 0px !important;
+    -khtml-border-radius: 0px !important;
+    border-radius: 0px !important;
 }
 

@@ -1,28 +1,26 @@
 <!DOCTYPE html>
 <html ng-app="ionicApp">
 <head>
-<link rel="icon" 
-      type="image/png" 
-      href="css/images/ic_launcher.png" />
-  <meta charset="utf-8">
-  <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width">
+	<link rel="icon" type="image/png" href="css/images/ic_launcher.png" />
+  	<meta charset="utf-8">
+  	<meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width">
 
-  <title>Any information</title>
+  	<title>Any information</title>
 
-  <link href="css/ionic.css" rel="stylesheet">
+  	<link href="css/ionic.css" rel="stylesheet">
   
-  <script src="ionic.bundle.min.js"></script>
-  <script src="script.js"></script>
+  	<script src="js/lib/ionic.bundle.min.js"></script>
+  	<script src="js/routes.js"></script>
+  	<script src="js/script.js"></script>
 
 </head>
 
 <body ng-controller="MyCtrl">
-
 	<ion-side-menus>
 	 <!-- Left menu -->
 		<ion-side-menu side="left" expose-aside-when="large">
 			<div class="list list-inset">
-				<div class="item" ng-repeat="menuItem in params.sideMenuList" ng-click=showMenuPage(menuItem)>
+				<div class="item myitem" ng-repeat="menuItem in params.sideMenuList" ng-click=showMenuPage(menuItem)>
 					<h2><b>{{menuItem.desc}}</b></h2>
 				</div>
 			</div>
@@ -33,52 +31,11 @@
 				<button class="button icon ion-home" ng-click="showHomePage()"></button>
 			 	<button class="button icon ion-navicon" ng-click="showMenu()"></button>
 			   	<h1 class="title">{{myTitle}}</h1>
-				<button class="button button-icon-small icon-right ion-information-circled" ng-click="doSomething()">Post</button>
+				<button ng-show="params.showPostInfo" class="button button-icon-small icon-right ion-information-circled" ng-click="doSomething()">Post</button>
 			</ion-header-bar>
 		  
-			<ion-content ng-show="params.isCategoryPage">
-				<h4>Choose category for information</h4>
-				<div class="list list-inset">
-					<div class="item" ng-repeat="category in params.categoryList" ng-click=showCategoryInfo(category)>
-						<h2>{{category.desc}}</h2>
-					</div>
-				</div>
-			</ion-content>
-			
-			<ion-content ng-show="params.isHomePage" id="homePage">
-				<div>
-					<div class="list card" ng-repeat="item in params.items" ng-click=showInfo(item)>
-						<div class="item item-header">
-						<span class="item-note">{{item.category}}</span>
-					    	<h2>{{item.title}}</h2>
-					  	</div>
-					  	<div class="item noBorders">
-					  		<p>{{item.information}}</p>
-					  	</div>
-					  	<div class="item item-footer noBorders">
-					  		<p><span class="elapsedTime">{{item.timeElapsed}}</span><span class="badge badge-success" ng-click="updateLikes(item, $event)"><i class="icon ion-thumbsup" style="margin-right:4px"></i>{{item.likes}}</span><span class="badge badge-assertive" ng-click="updateDislikes(item, $event)"><i class="icon ion-thumbsdown" style="margin-right:4px"></i>{{item.dislikes}}</span></p>
-					  	</div>
-					</div>
-					<ion-infinite-scroll distance="1%" on-infinite="loadMore()" ng-if="!params.moreData"></ion-infinite-scroll>
-				</div>
-				
-			</ion-content>
-			<div class="fabButton" ng-click="scrollToTop()" ng-show="params.isHomePage">
-			  <span href=""><i class="icon ion-arrow-up-b"></i></span>
-			</div>
+			<ion-nav-view></ion-nav-view>
 		</ion-side-menu-content>
 	</ion-side-menus>
-	
-	<!-- <ion-content ng-show="params.isHomePage">
-		<div class="list">
-			<div class="item" ng-repeat="item in params.items" ng-click=showInfo(item)>
-				<span class="item-note">{{item.category}}</span>
-				<h2>{{item.title}}<span class="elapsedTime"> - {{item.timeElapsed}}</span></h2>
-				<p class="infoWidth">{{item.information}}</p>
-				<span class="badge badge-success" ng-click="updateLikes(item, $event)"><i class="icon ion-thumbsup" style="margin-right:4px"></i>{{item.likes}}</span><span class="badge badge-assertive" ng-click="updateDislikes(item, $event)"><i class="icon ion-thumbsdown" style="margin-right:4px"></i>{{item.dislikes}}</span>
-			</div>
-		</div>
-		<ion-infinite-scroll distance="1%" on-infinite="loadMore()" ng-if="!params.moreData"></ion-infinite-scroll>
-	</ion-content> -->
 </body>
 </html>
