@@ -112,6 +112,7 @@ angular.module('ionicApp')
 	$scope.showCategoryInfo = function(category){
 		$scope.params.currentCategory = category.id;
 		$scope.params.lastDate = "";
+		$scope.params.lastRefreshDate = "";
 		$scope.params.moreData = false;
 		$scope.params.items = [];
 		//populateInfo();
@@ -211,6 +212,7 @@ angular.module('ionicApp')
 			}else{
 				$scope.params.items.splice(0,0,data);
 			}
+			$scope.params.lastRefreshDate = data.datetime;
 		},function(){
 			$ionicLoading.hide();
 			$ionicLoading.show({
