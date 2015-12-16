@@ -15,6 +15,7 @@ angular.module('ionicApp')
 	$scope.params.categoryList = [];
 	$scope.params.sideMenuList = [];
 	$scope.params.showPostInfo = true;
+	var localCreatedData= [];
 	
 	fetchMenuList();
 	
@@ -24,6 +25,7 @@ angular.module('ionicApp')
 		$scope.params.lastDate = "";
 		$scope.params.lastRefreshDate = "";
 		$scope.params.moreData = false;
+		localCreatedData = [];
 		//populateInfo();
 	}
 	
@@ -115,6 +117,7 @@ angular.module('ionicApp')
 		$scope.params.lastRefreshDate = "";
 		$scope.params.moreData = false;
 		$scope.params.items = [];
+		localCreatedData = [];
 		//populateInfo();
 		$ionicScrollDelegate.scrollTop(true);
 		$state.go("index");
@@ -173,7 +176,10 @@ angular.module('ionicApp')
 			var data = response.data;
 			if(data){
 				for(var temp in data){
-					$scope.params.items.splice(0,0,data[temp]);
+					if(!localCreatedData[data[temp].datetime]){
+						$scope.params.items.splice(0,0,data[temp]);	
+					}
+					
 					$scope.params.lastRefreshDate = data[temp].datetime;
 				}
 			}
@@ -212,7 +218,7 @@ angular.module('ionicApp')
 			}else{
 				$scope.params.items.splice(0,0,data);
 			}
-			$scope.params.lastRefreshDate = data.datetime;
+			localCreatedData[data.datetime] = true;
 		},function(){
 			$ionicLoading.hide();
 			$ionicLoading.show({
