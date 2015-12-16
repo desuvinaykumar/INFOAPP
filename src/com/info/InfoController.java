@@ -67,14 +67,14 @@ public class InfoController {
 			sql += " and (";
 			boolean addOrr = false;
 			if(title!=null && !title.equals("")){
-				sql += " insrt(lower(ta_info_title), lower('"+title+"')) >= 0 ";
+				sql += " instr(lower(ta_info_title), lower('"+title+"')) >= 0 ";
 				addOrr = true;
 			}
 			if(information!=null && !information.equals("")){
 				if(addOrr){
 					sql += " or ";
 				}
-				sql += " insrt(lower(ta_info_info), lower('"+information+"')) >= 0 ";
+				sql += " instr(lower(ta_info_info), lower('"+information+"')) >= 0 ";
 			}
 			sql += ") ";
 		}
