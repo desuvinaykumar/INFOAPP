@@ -105,7 +105,7 @@ angular.module('ionicApp', ['ionic'])
 		$scope.params.isHomePage = true;
 		$scope.params.isCategoryPage = false;
 		resetToHome();
-		$ionicScrollDelegate.scrollTop();
+		$ionicScrollDelegate.scrollTop(true);
 	};
 	
 	$scope.showMenu = function(){
@@ -140,7 +140,7 @@ angular.module('ionicApp', ['ionic'])
 		$scope.params.moreData = false;
 		$scope.params.items = [];
 		//populateInfo();
-		$ionicScrollDelegate.scrollTop();
+		$ionicScrollDelegate.scrollTop(true);
 	};
 	
 	$scope.checkInfoCount = function(){
@@ -185,6 +185,10 @@ angular.module('ionicApp', ['ionic'])
 		
 	$scope.loadMore = function(){
 		populateInfo($scope.params.lastDate);
+	};
+	
+	$scope.scrollToTop = function(){
+		$ionicScrollDelegate.scrollTop(true);
 	};
 	
 	$scope.postInfo = function() {
