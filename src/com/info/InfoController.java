@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.info.util.Utilities;
+import com.info.util.WordCensorUtility;
 
 @Controller
 @RequestMapping("/info")
@@ -28,6 +29,9 @@ public class InfoController {
 
 		String sql = "INSERT INTO ta_info " +
 				"(ta_info_title, ta_info_category, ta_info_info, ta_info_createddate) VALUES (?, ?, ?, current_timestamp)";
+		
+		info.setTitle(WordCensorUtility.censor(info.getTitle()));
+		info.setInformation(WordCensorUtility.censor(info.getInformation()));
 		
 		jdbcTemplate.update(sql, new Object[] { info.getTitle(),
 				info.getCategory(), info.getInformation()  
