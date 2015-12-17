@@ -5,6 +5,16 @@ public class Menu {
 	private int id;
 	
 	private String desc;
+	
+	private String code;
+
+	public String getCode() {
+		return code;
+	}
+
+	public void setCode(String code) {
+		this.code = code;
+	}
 
 	public int getId() {
 		return id;

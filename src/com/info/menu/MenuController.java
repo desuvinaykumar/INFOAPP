@@ -23,7 +23,7 @@ public class MenuController {
 	public @ResponseBody
 	List<Menu> fetch() {
 
-		String sql = "select ta_menu_id, ta_menu_desc, ta_menu_seq from ta_menu order by ta_menu_seq asc";
+		String sql = "select ta_menu_id, ta_menu_desc, ta_menu_seq, ta_menu_code from ta_menu order by ta_menu_seq asc";
 		
 		return jdbcTemplate.query(sql, new RowMapper<Menu>(){
 			@Override  
@@ -31,6 +31,7 @@ public class MenuController {
 				Menu e=new Menu(); 
 				e.setId(rs.getInt(1));
 				e.setDesc(rs.getString(2));
+				e.setCode(rs.getString(4));
 				return e;  
 			}  
 		});
