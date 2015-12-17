@@ -9,12 +9,19 @@ angular.module('ionicApp')
 	$scope.params.items = [];
 	$scope.modal = null;
 	$scope.params.currentCategory = "";
+	$scope.params.currentTitle = "";
+	$scope.params.currentInformation = "";
 	$scope.params.lastDate = "";
 	$scope.params.lastRefreshDate = "";
 	$scope.params.moreData = false;
 	$scope.params.categoryList = [];
 	$scope.params.sideMenuList = [];
 	$scope.params.showPostInfo = true;
+	
+	$scope.params.searchText = "";
+	$scope.params.searchCategory = "";
+	$scope.params.searchItems = [];
+	
 	var localCreatedData= [];
 	
 	fetchMenuList();
@@ -22,6 +29,8 @@ angular.module('ionicApp')
 	function resetToHome(){
 		$scope.params.items = [];
 		$scope.params.currentCategory = "";
+		$scope.params.currentTitle = "";
+		$scope.params.currentInformation = "";
 		$scope.params.lastDate = "";
 		$scope.params.lastRefreshDate = "";
 		$scope.params.moreData = false;
@@ -54,7 +63,7 @@ angular.module('ionicApp')
 	function checkCount(){
 		$http({method:"POST",
 			url:"/INFOAPP/rest/info/count",
-			data:{category:$scope.params.currentCategory, datetime:$scope.params.lastDate}}
+			data:{title: $scope.params.currentTitle, information : $scope.params.currentInformation, category:$scope.params.currentCategory, datetime:$scope.params.lastDate}}
 		).then(function(response){
 			var data = response.data;
 			$scope.params.moreData = parseInt(data.no)?false:true;
@@ -63,15 +72,13 @@ angular.module('ionicApp')
 		});
 	}
 	
-	
-	
 	function populateInfo(){
 		if(!$scope.params.lastDate){
 			$scope.params.items = [];
 		}
 		$http({method:"POST",
 			url:"/INFOAPP/rest/info/fetch",
-			data:{category:$scope.params.currentCategory, datetime:$scope.params.lastDate}}
+			data:{title: $scope.params.currentTitle, information : $scope.params.currentInformation, category:$scope.params.currentCategory, datetime:$scope.params.lastDate}}
 		).then(function(response){
 			var data = response.data;
 			if(data && data.length!=0){
@@ -113,6 +120,29 @@ angular.module('ionicApp')
 	
 	$scope.showCategoryInfo = function(category){
 		$scope.params.currentCategory = category.id;
+		$scope.params.currentTitle = "";
+		$scope.params.currentInformation = "";
+		$scope.params.lastDate = "";
+		$scope.params.lastRefreshDate = "";
+		$scope.params.moreData = false;
+		$scope.params.items = [];
+		localCreatedData = [];
+		//populateInfo();
+		$ionicScrollDelegate.scrollTop(true);
+		$state.go("index");
+	};
+	
+	
+	$scope.showSearchInfo = function(){
+		if(!$scope.params.searchCategory && !$scope.params.searchText){
+			$scope.params.currentCategory = "";
+			$scope.params.currentTitle = "";
+			$scope.params.currentInformation = "";
+		}else{
+			$scope.params.currentCategory = $scope.params.searchCategory;
+			$scope.params.currentTitle = $scope.params.searchText;
+			$scope.params.currentInformation = $scope.params.searchText;
+		}
 		$scope.params.lastDate = "";
 		$scope.params.lastRefreshDate = "";
 		$scope.params.moreData = false;
@@ -164,14 +194,14 @@ angular.module('ionicApp')
 	};
 		
 	$scope.loadMore = function(){
-		populateInfo($scope.params.lastDate);
+		populateInfo();
 	};
 	
 	$scope.doRefresh = function(){
 		
 		$http({method:"POST",
 			url:"/INFOAPP/rest/info/pullToRefresh",
-			data:{category:$scope.params.currentCategory, datetime:$scope.params.lastRefreshDate}}
+			data:{title: $scope.params.currentTitle, information : $scope.params.currentInformation, category:$scope.params.currentCategory, datetime:$scope.params.lastRefreshDate}}
 		).then(function(response){
 			var data = response.data;
 			if(data){
@@ -239,8 +269,7 @@ angular.module('ionicApp')
 		$scope.modal.hide();
 		$scope.modal.remove();
 	};
-
-
+	
 	$scope.doSomething = function() {
 		$scope.params.infoTitle = '';
 		$scope.params.infoCategory = '';
@@ -265,6 +294,10 @@ angular.module('ionicApp')
 			$scope.params.showPostInfo = true;
 		}else{
 			$scope.params.showPostInfo = false;
+		}
+		if($ionicHistory.currentStateName() == "searchinfo"){
+			$scope.params.searchText = "";
+			$scope.params.searchCategory = "";
 		}
 	});
 	
