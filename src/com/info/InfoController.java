@@ -67,14 +67,14 @@ public class InfoController {
 			sql += " and (";
 			boolean addOrr = false;
 			if(title!=null && !title.equals("")){
-				sql += " instr(lower(ta_info_title), lower('"+title+"')) >= 0 ";
+				sql += " instr(lower(ta_info_title), lower('"+title+"')) > 0 ";
 				addOrr = true;
 			}
 			if(information!=null && !information.equals("")){
 				if(addOrr){
 					sql += " or ";
 				}
-				sql += " instr(lower(ta_info_info), lower('"+information+"')) >= 0 ";
+				sql += " instr(lower(ta_info_info), lower('"+information+"')) > 0 ";
 			}
 			sql += ") ";
 		}
@@ -112,6 +112,23 @@ public class InfoController {
 		sql += " where ta_category_id = ta_info_category ";
 		if(info.getCategory()!=null  && !info.getCategory().equals("")){
 			sql += " and ta_info_category = "+info.getCategory()+" ";
+		}
+		String title = info.getTitle();
+		String information = info.getInformation();
+		if((title!=null && !title.equals("")) || (information!=null && !information.equals(""))){
+			sql += " and (";
+			boolean addOrr = false;
+			if(title!=null && !title.equals("")){
+				sql += " instr(lower(ta_info_title), lower('"+title+"')) > 0 ";
+				addOrr = true;
+			}
+			if(information!=null && !information.equals("")){
+				if(addOrr){
+					sql += " or ";
+				}
+				sql += " instr(lower(ta_info_info), lower('"+information+"')) > 0 ";
+			}
+			sql += ") ";
 		}
 		if(info.getDatetime()!=null && !info.getDatetime().equals("")){
 			sql += " and DATE_FORMAT(ta_info_date,'%Y%m%d%H%i%s') < convert('"+info.getDatetime()+"', unsigned integer)";
