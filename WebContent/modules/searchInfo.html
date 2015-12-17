@@ -1,9 +1,19 @@
 <ion-view>
 	<ion-content>
-		<div class="list card">
-			<div class="item item-body noBorders myitem">
-			<p>Page under construction</p>
-			</div>
-		</div>
+		<div class="list">
+			  <label class="item item-input item-floating-label">
+				<span class="input-label">Search text</span>
+				<input type="text" placeholder="Search text" ng-model="params.searchText">
+			  </label>
+			  <label class="item item-input item-select">
+				<div class="input-label">Category</div>
+			    <select ng-model="params.searchCategory">
+		   		  <option ng-repeat="category in params.categoryList" value="{{category.id}}">{{category.desc}}</option>
+			    </select>
+			  </label>
+			  <div class="button-bar bar-balanced">
+				  <a class="button" ng-click="showSearchInfo()">Search</a>
+				</div>
+		  </div>
 	</ion-content>
 </ion-view>
