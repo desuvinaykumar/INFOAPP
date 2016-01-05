@@ -1,41 +1,22 @@
 <!DOCTYPE html>
 <html ng-app="ionicApp">
-<head>
-	<link rel="icon" type="image/png" href="css/images/ic_launcher.png" />
-  	<meta charset="utf-8">
-  	<meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width">
-
-  	<title>Any information</title>
-
-  	<link href="css/ionic.css" rel="stylesheet">
-  
-  	<script src="js/lib/ionic.bundle.min.js"></script>
-  	<script src="js/routes.js"></script>
-  	<script src="js/script.js"></script>
-
-</head>
-
-<body ng-controller="MyCtrl">
-	<ion-side-menus>
-	 <!-- Left menu -->
-		<ion-side-menu side="left" expose-aside-when="large">
-			<div class="list list-inset">
-				<div class="item myitem" ng-repeat="menuItem in params.sideMenuList" ng-click=showMenuPage(menuItem)>
-					<h2><b>{{menuItem.desc}}</b></h2>
-				</div>
-			</div>
-		</ion-side-menu>
+	<head>
+		<link rel="icon" type="image/png" href="css/images/ic_launcher.png" />
+	  	<meta charset="utf-8">
+	  	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+	  	
+	  	<title>Any information</title>
 	
-		<ion-side-menu-content>
-			<ion-header-bar class="bar-positive">
-				<button class="button icon ion-home" ng-click="showHomePage()"></button>
-			 	<button class="button icon ion-navicon" ng-click="showMenu()"></button>
-			   	<h1 class="title">{{myTitle}}</h1>
-				<button ng-show="params.showPostInfo" class="button button-icon-small icon-right ion-information-circled" ng-click="doSomething()">Post</button>
-			</ion-header-bar>
-		  
-			<ion-nav-view></ion-nav-view>
-		</ion-side-menu-content>
-	</ion-side-menus>
-</body>
+	  	<link href="css/ionic.css" rel="stylesheet">
+	  	<script src="js/lib/ionic.bundle.min.js"></script>
+	  	<script src="js/lib/oauthjs/angularOauth.js"></script>
+	  	<script src="js/lib/oauthjs/googleOauth.js"></script>
+	  	<script src="js/lib/html5utils/h5utils.js"></script>
+	  	<script src="js/routes.js"></script>
+	  	<script src="js/script.js"></script>
+	</head>
+	
+	<body ng-controller="MyCtrl">
+		<ion-nav-view cache-view="false"></ion-nav-view>
+	</body>
 </html>

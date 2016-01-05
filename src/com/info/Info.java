@@ -17,6 +17,26 @@ public class Info {
 	private String timeElapsed;
 	
 	private String createdDate;
+	
+	private String email;
+	
+	private String bookmarked;
+
+	public String getBookmarked() {
+		return bookmarked;
+	}
+
+	public void setBookmarked(String bookmarked) {
+		this.bookmarked = bookmarked;
+	}
+
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
 
 	public String getCreatedDate() {
 		return createdDate;

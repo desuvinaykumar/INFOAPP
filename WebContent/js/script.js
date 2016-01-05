@@ -1,5 +1,12 @@
 angular.module('ionicApp')
-.controller('MyCtrl', function($scope, $ionicModal, $http, $ionicPopup, $ionicLoading, $ionicSideMenuDelegate,$ionicScrollDelegate, $state, $ionicHistory) {
+.controller('MyCtrl', function($scope, $ionicModal, $http, $ionicPopup, $ionicLoading, $ionicSideMenuDelegate,$ionicScrollDelegate, $state, $ionicHistory, $rootScope, Token) {
+	
+	if(mobileAndTabletcheck()){
+		loadJS("cordova.js");
+		document.addEventListener("deviceready",
+				deviceReadyFunc, false);
+	}
+	
 	$scope.myTitle = 'Any Information!!!';
 
 	$scope.params={};
@@ -22,9 +29,27 @@ angular.module('ionicApp')
 	$scope.params.searchCategory = "";
 	$scope.params.searchItems = [];
 	
+	$scope.params.hideMenu = false;
+	
+	$scope.params.userInformation = {
+			picture:"",
+			name:"",
+			gender:"",
+			email:""
+	};
+	
+	$scope.params.contact = {
+			name : "",
+			suggestion : ""
+	};
+	
 	var localCreatedData= [];
 	
 	fetchMenuList();
+	
+	function goToPage(pageid){
+		$state.go("layout."+pageid);
+	}
 	
 	function resetToHome(){
 		$scope.params.items = [];
@@ -40,7 +65,7 @@ angular.module('ionicApp')
 	
 	function fetchMenuList(){
 		$http({method:"POST",
-			url:"/INFOAPP/rest/menu/get"}
+			url:getURL("rest/menu/get")}
 		).then(function(response){
 			$scope.params.sideMenuList = response.data;
 			fetchCategoryList();
@@ -51,10 +76,18 @@ angular.module('ionicApp')
 	
 	function fetchCategoryList(){
 		$http({method:"POST",
-			url:"/INFOAPP/rest/info/categoryList"}
+			url:getURL("rest/info/categoryList")}
 		).then(function(response){
 			$scope.params.categoryList = response.data;
-			$state.go("index");
+			if(Token.get()){
+				updateUserInfoFromGoogle(function(){
+					goToPage("index");
+				},function(){
+					$state.go("welcome");
+				});
+			}else{
+				$state.go("welcome");
+			}
 		},function(response){
 			
 		});
@@ -62,7 +95,7 @@ angular.module('ionicApp')
 	
 	function checkCount(){
 		$http({method:"POST",
-			url:"/INFOAPP/rest/info/count",
+			url:getURL("rest/info/count"),
 			data:{title: $scope.params.currentTitle, information : $scope.params.currentInformation, category:$scope.params.currentCategory, datetime:$scope.params.lastDate}}
 		).then(function(response){
 			var data = response.data;
@@ -77,8 +110,8 @@ angular.module('ionicApp')
 			$scope.params.items = [];
 		}
 		$http({method:"POST",
-			url:"/INFOAPP/rest/info/fetch",
-			data:{title: $scope.params.currentTitle, information : $scope.params.currentInformation, category:$scope.params.currentCategory, datetime:$scope.params.lastDate}}
+			url:getURL("rest/info/fetch"),
+			data:{title: $scope.params.currentTitle, information : $scope.params.currentInformation, category:$scope.params.currentCategory, datetime:$scope.params.lastDate, email : $scope.params.userInformation.email}}
 		).then(function(response){
 			var data = response.data;
 			if(data && data.length!=0){
@@ -106,7 +139,7 @@ angular.module('ionicApp')
 	$scope.showHomePage = function(){
 		resetToHome();
 		$ionicScrollDelegate.scrollTop(true);
-		$state.go("index");
+		goToPage("index");
 	};
 	
 	$scope.showMenu = function(){
@@ -115,7 +148,7 @@ angular.module('ionicApp')
 	
 	$scope.showMenuPage = function(menuItem){
 		$ionicSideMenuDelegate.toggleLeft();
-		$state.go(menuItem.code);
+		goToPage(menuItem.code);
 	};
 	
 	$scope.showCategoryInfo = function(category){
@@ -129,7 +162,7 @@ angular.module('ionicApp')
 		localCreatedData = [];
 		//populateInfo();
 		$ionicScrollDelegate.scrollTop(true);
-		$state.go("index");
+		goToPage("index");
 	};
 	
 	
@@ -150,7 +183,7 @@ angular.module('ionicApp')
 		localCreatedData = [];
 		//populateInfo();
 		$ionicScrollDelegate.scrollTop(true);
-		$state.go("index");
+		goToPage("index");
 	};
 	
 	$scope.checkInfoCount = function(){
@@ -170,7 +203,7 @@ angular.module('ionicApp')
 		$event.stopPropagation();
 		info.likes = (Number(info.likes)+1)+"";
 		$http({method:"POST",
-			url:"/INFOAPP/rest/info/updateLikes",
+			url:getURL("rest/info/updateLikes"),
 			data:info}
 		).then(function(response){
 			localCreatedData[response.data.createdDate] = true;
@@ -184,13 +217,43 @@ angular.module('ionicApp')
 		info.dislikes = (Number(info.dislikes)+1)+"";
 		
 		$http({method:"POST",
-			url:"/INFOAPP/rest/info/updateDislikes",
+			url:getURL("rest/info/updateDislikes"),
 			data:info}
 		).then(function(response){
 			localCreatedData[response.data.createdDate] = true;
 		},function(){
 			
 		});
+	};
+	
+	$scope.isFavorite = function(info){
+		if(Number(info.bookmarked) == 0){
+			return "ion-star";
+		}
+		return "ion-star-favorite";
+	};
+	
+	$scope.setFavorite = function(info, $event){
+		$event.stopPropagation();
+		if(!checkLoggedIn("Please login to store your favorite information.")){
+			return;
+		}
+		
+		$http({method:"POST",
+			url:getURL("rest/favoriteinfo/update"),
+			data:{title:info.title, createdDate : info.createdDate, email : $scope.params.userInformation.email}}
+		).then(function(response){
+			if(Number(info.bookmarked) == 0){
+				info.bookmarked = 1;
+			}else{
+				info.bookmarked = 0;
+			}
+		},function(){
+			$ionicPopup.alert({
+				template: 'Error storing favorites'
+			});
+		});
+		
 	};
 		
 	$scope.loadMore = function(){
@@ -200,7 +263,7 @@ angular.module('ionicApp')
 	$scope.doRefresh = function(){
 		
 		$http({method:"POST",
-			url:"/INFOAPP/rest/info/pullToRefresh",
+			url:getURL("rest/info/pullToRefresh"),
 			data:{title: $scope.params.currentTitle, information : $scope.params.currentInformation, category:$scope.params.currentCategory, datetime:$scope.params.lastRefreshDate}}
 		).then(function(response){
 			var data = response.data;
@@ -222,22 +285,182 @@ angular.module('ionicApp')
 		
 	};
 	
+	$scope.goToIndex = function(){
+		goToPage("index");
+		$ionicScrollDelegate.scrollTop(true);
+	};
+	
+	$scope.accessToken = Token.get();
+	
+	$scope.googleLogout = function(){
+		Token.clear();
+		$scope.accessToken = null;
+		$scope.expiresIn = 0;
+		$scope.params.userInformation = {
+				picture:"",
+				name:"",
+				gender:"",
+				email:""
+		};
+	};
+	
+	$scope.submitSuggestion = function(){
+		if(!checkLoggedIn("Please login to submit your suggestions.")){
+			return;
+		}
+		$ionicLoading.show();		
+		$http({method:"POST",
+			url:getURL("rest/contactus/submit"),
+			data:{email : $scope.params.userInformation.email, suggestion : $scope.params.contact.suggestion}
+		})
+		.then(function(success){
+			$ionicLoading.hide();
+			$ionicPopup.show({
+				template: success.data.successMsg?success.data.successMsg:success.data.errorMsg,
+						buttons: [{
+							text : "Ok",
+							type : "button-positive",
+							onTap : function(e){
+								goToPage("index");
+							}
+						}]
+			});
+		}, function(error){
+			$ionicLoading.hide();
+			$ionicPopup.alert({
+				template: 'Error in the network'
+			});
+		});
+		
+	};
+	
+	function updateUserInfoFromGoogle(successCallBack, errorCallBack){
+		Token.userInfo(Token.get()).then(function(data){
+			$scope.params.userInformation = {
+					picture:data.picture,
+					name:data.name,
+					gender:data.gender,
+					email:data.email
+			};
+			
+			$http({method:"POST",
+				url:getURL("rest/userinformation/update"),
+				data:{email : data.email, name: data.name, picture : data.picture, gender : data.gender}}
+			);
+			
+			if(successCallBack){
+				successCallBack();
+			}
+		},function(){
+			Token.clear();
+			$scope.params.userInformation = {
+					picture:"",
+					name:"",
+					gender:"",
+					email:""
+			};
+			if(errorCallBack){
+				errorCallBack();
+			}
+		});
+	}
+	
+	
+	$scope.googleSignIn = function(){
+		
+		/*if(mobileAndTabletcheck()){
+			$ionicPopup.alert({
+				template: 'Google signin for mobile is in progress. Thanks for your patience.'
+			});
+			return;
+		}*/
+		
+		var w  = 450;
+        var h = 500;
+		var left = (window.screen.width / 2) - ((w / 2) + 10);
+	    var top = (window.screen.height / 2) - ((h / 2) + 50);
+	    
+	    /*if(mobileAndTabletcheck()){
+	    	Token.getTokenInSameWindow({redirect_uri: getURL('oauth2nativecallback.html')});
+	    	return;
+	    }*/
+
+		Token.getTokenByPopup({display:"popup"}, {openParams:{width: w, height:h, left : left, top : top}})
+		//Token.getTokenInSameWindow()
+		.then(function(params) {
+			// Success getting token from popup.
+
+			// Verify the token before setting it, to avoid the confused deputy problem.
+			Token.verifyAsync(params.access_token).
+			then(function(data) {
+				$rootScope.$apply(function() {
+					$scope.accessToken = params.access_token;
+					$scope.expiresIn = params.expires_in;
+
+					Token.set(params.access_token);
+				});
+				updateUserInfoFromGoogle(function(){
+					goToPage("index");
+					$ionicScrollDelegate.scrollTop(true); 
+				},function(){
+					$ionicPopup.alert({
+						template: 'Failed to Login'
+					});
+				});
+			}, function() {
+				$ionicPopup.alert({
+					template: 'Failed to verify user from Google'
+				});
+			});
+
+		}, function() {
+			// Failure getting token from popup.
+			$ionicPopup.alert({
+				template: 'Failed to get authentication from Google'
+			});
+		});
+
+
+	};
+	
 	$scope.scrollToTop = function(){
 		$ionicScrollDelegate.scrollTop(true);
 	};
 	
+	function checkLoggedIn(msg){
+		if(!$scope.params.userInformation.email){
+			$ionicPopup.show({
+				template: '<div style="text-align:center;">'+msg+'</div>',
+			    buttons: [
+			      { text: 'Login' ,
+			    	  type: 'button-positive',
+			          onTap: function(e) {
+			        	  goToPage("userinfo");
+			          }
+			      },
+			      { text: 'Close' }]
+			});
+			return false;
+		}
+		return true;
+	}
+	
 	$scope.postInfo = function() {
+		
+		if(!checkLoggedIn("Please login to post information.")){
+			return;
+		}
 
 		if(!$scope.params.infoTitle || !$scope.params.information || !$scope.params.infoCategory){
 			$ionicPopup.alert({
-				template: 'Please fill all the fields'
+				template: 'Please fill all the fields.'
 			});
 			return;
 		}
 
-		var data = {title : $scope.params.infoTitle, information: $scope.params.information, category : $scope.params.infoCategory};
+		var data = {title : $scope.params.infoTitle, information: $scope.params.information, email : $scope.params.userInformation.email, category : $scope.params.infoCategory};
 		$http({method:"POST",
-			url:"/INFOAPP/rest/info/create",
+			url:getURL("rest/info/create"),
 			data:data}
 		).then(function(response){
 			$ionicLoading.hide();
@@ -256,7 +479,7 @@ angular.module('ionicApp')
 			});
 			setTimeout(function(){
 				$ionicLoading.hide();
-			}, 3000);
+			}, 1500);
 		});
 		$scope.modal.hide();
 		$scope.modal.remove();
@@ -271,6 +494,10 @@ angular.module('ionicApp')
 	};
 	
 	$scope.doSomething = function() {
+		if(!checkLoggedIn("Please login to post information.")){
+			return;
+		}
+		
 		$scope.params.infoTitle = '';
 		$scope.params.infoCategory = '';
 		$scope.params.information = '';
@@ -290,14 +517,25 @@ angular.module('ionicApp')
 		setTimeout(function() {
 			$ionicScrollDelegate.scrollTop(true);
 		},0);
-		if($ionicHistory.currentStateName() == "index"){
+		
+		if($ionicHistory.currentStateName() == "welcome"){
+			$scope.params.hideMenu = true;
+		}else{
+			$scope.params.hideMenu = false;
+		}
+		
+		if($ionicHistory.currentStateName() == "layout.index"){
 			$scope.params.showPostInfo = true;
 		}else{
 			$scope.params.showPostInfo = false;
 		}
-		if($ionicHistory.currentStateName() == "searchinfo"){
+		if($ionicHistory.currentStateName() == "layout.searchinfo"){
 			$scope.params.searchText = "";
 			$scope.params.searchCategory = "";
+		}
+		if($ionicHistory.currentStateName() == "layout.contactus"){
+			$scope.params.contact.name = "";
+			$scope.params.contact.suggestion = "";
 		}
 	});
 	

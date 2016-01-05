@@ -5,8 +5,8 @@
 		  </ion-refresher>
 			<div class="list card" ng-repeat="item in params.items" ng-click=showInfo(item)>
 				<div class="item item-header myitem">
-				<span class="item-note">{{item.category}}</span>
-			    	<h2>{{item.title}}</h2>
+				<span class="item-note">{{item.category}}<i class="icon" ng-class="isFavorite(item)" ng-click="setFavorite(item, $event)" style="margin-left:4px"></i></span>
+			    	<h2><i class="icon ion-link" style="margin-right:5px;"></i>{{item.title}}</h2>
 			  	</div>
 			  	<div class="item noBorders  myitem">
 			  		<p>{{item.information}}</p>

@@ -1,0 +1,13 @@
+ClearCase CopyAreaDB|4
+vobs\vob_goldv6\V6_Mobile\V6Mobile_IOSProj\platforms\ios\www\plugins
+2
+9
+19:org.apache.cordova.camera|2|0|0|0|beb3118bd37e11e49a63005056832b4f|0
+26:org.apache.cordova.network-information|2|0|0|0|be63114bd37e11e49a63005056832b4f|0
+f:jquery.media.js|1|15157d89cdf|40f5|ca0fc006|bf5311fbd37e11e49a63005056832b4f|0
+12:jquery.validate.js|1|15157d89cb2|1883|a50c3d52|be53113bd37e11e49a63005056832b4f|0
+16:jquery.alphanumeric.js|1|15157d8a10e|58a|3c2cb6fb|bfe3125bd37e11e49a63005056832b4f|0
+16:jquery.formrestrict.js|1|15157d89d09|3c6|75552448|bf73120bd37e11e49a63005056832b4f|0
+d:alert_view.js|1|15157d89c9e|10ed|77ad52b3|be23112bd37e11e49a63005056832b4f|0
+1c:org.apache.cordova.vibration|2|0|0|0|bfb3122bd37e11e49a63005056832b4f|0
+13:jquery.xpath.min.js|1|15157d89dec|326f6|a1e0b230|bf93121bd37e11e49a63005056832b4f|0

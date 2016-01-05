@@ -1,0 +1,21 @@
+<ion-side-menus>
+ <!-- Left menu -->
+	<ion-side-menu side="left" expose-aside-when="large" ng-hide="params.hideMenu">
+		<div class="list list-inset">
+			<div class="item myitem" ng-repeat="menuItem in params.sideMenuList" ng-click=showMenuPage(menuItem)>
+				<h2><b>{{menuItem.desc}}</b></h2>
+			</div>
+		</div>
+	</ion-side-menu>
+
+	<ion-side-menu-content>
+		<ion-header-bar class="bar-positive" ng-hide="params.hideMenu">
+			<button class="button icon ion-home" ng-click="showHomePage()"></button>
+		 	<button class="button icon ion-navicon" ng-click="showMenu()"></button>
+		   	<h1 class="title">{{myTitle}}</h1>
+			<button ng-show="params.showPostInfo" class="button button-icon-small icon-right ion-information-circled" ng-click="doSomething()">Post</button>
+		</ion-header-bar>
+	  
+		<ion-nav-view name="menuContent" cache-view="false"></ion-nav-view>
+	</ion-side-menu-content>
+</ion-side-menus>

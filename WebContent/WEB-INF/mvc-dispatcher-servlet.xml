@@ -19,16 +19,16 @@
 
 	<mvc:annotation-driven />
 
-	<!-- <bean id="propertyConfigurer"
+	<bean id="propertyConfigurer"
 		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer"
 		p:location="/WEB-INF/jdbclocal.properties"></bean>
 
 	<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource"
 		destroy-method="close" p:driverClassName="${jdbc.driverClassName}"
 		p:url="${jdbc.databaseurl}" p:username="${jdbc.username}" p:password="${jdbc.password}">
-	</bean> -->
+	</bean>
 
-	<jee:jndi-lookup id="dataSource" jndi-name="jdbc/MySQLDS"/>
+	<!-- <jee:jndi-lookup id="dataSource" jndi-name="jdbc/MySQLDS"/> -->
 
 	<bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
 		<property name="dataSource" ref="dataSource"></property>
@@ -40,6 +40,7 @@
 				<value>fuck</value>
 				<value>shit</value>
 				<value>nude</value>
+				<value>sex</value>
 			</set>
 		</property>
 	</bean>

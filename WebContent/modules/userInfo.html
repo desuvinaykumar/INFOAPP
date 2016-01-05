@@ -1,0 +1,21 @@
+<ion-view>
+	<ion-content>
+		<div class="list card" ng-show="params.userInformation.email">
+
+			<a class="item item-thumbnail-left" href="#">
+		      <img src="{{params.userInformation.picture}}">
+		      <h1 style="text-transform: capitalize;">{{params.userInformation.name}}</h1>
+		    </a>
+			<div class="item item-body noBorders myitem">
+				<p>Gender : {{params.userInformation.gender}}</p>
+				<p>E-Mail : {{params.userInformation.email}}</p>
+				<button class="button button-block button-assertive" ng-click="googleLogout()">Log Out</button>
+			</div>
+		</div>
+		<div class="list card" ng-hide="params.userInformation.email">
+			<div class="item item-body noBorders myitem">
+				<button class="button button-block button-positive" ng-click="googleSignIn()">Log In with Google</button>
+			</div>
+		</div>
+	</ion-content>
+</ion-view>

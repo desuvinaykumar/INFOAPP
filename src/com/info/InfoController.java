@@ -28,13 +28,13 @@ public class InfoController {
 	Info create(@RequestBody Info info) {
 
 		String sql = "INSERT INTO ta_info " +
-				"(ta_info_title, ta_info_category, ta_info_info, ta_info_createddate) VALUES (?, ?, ?, current_timestamp)";
+				"(ta_info_title, ta_info_category, ta_info_info, ta_info_createddate, ta_info_emailid) VALUES (?, ?, ?, current_timestamp, ?)";
 		
 		info.setTitle(WordCensorUtility.censor(info.getTitle()));
 		info.setInformation(WordCensorUtility.censor(info.getInformation()));
 		
 		jdbcTemplate.update(sql, new Object[] { info.getTitle(),
-				info.getCategory(), info.getInformation()  
+				info.getCategory(), info.getInformation(), info.getEmail()  
 			});
 		
 		return this.fetch(info).get(0);
@@ -59,8 +59,15 @@ public class InfoController {
 	public List<Info> getData(Info info, boolean requireNewData){
 		
 		String sql = "select ta_info_title title, ta_category_desc category, ta_info_info information, DATE_FORMAT(ta_info_date,'%Y%m%d%H%i%s') datetime, "
-				+ " ta_info_likes likes, ta_info_dislikes dislikes, DATE_FORMAT(current_timestamp,'%Y%m%d%H%i%s'), DATE_FORMAT(ta_info_createddate,'%Y%m%d%H%i%s') createdDate "
-				+ " from ta_info, ta_category ";
+				+ " ta_info_likes likes, ta_info_dislikes dislikes, DATE_FORMAT(current_timestamp,'%Y%m%d%H%i%s'), DATE_FORMAT(ta_info_createddate,'%Y%m%d%H%i%s') createdDate ";
+		
+		if(info.getEmail()!=null  && !info.getEmail().equals("")){
+			sql += ", (select count(*) from ta_favorites where ta_fav_info_title = ta_info_title and ta_fav_info_date = ta_info_createddate and ta_fav_user_emailid = '"+info.getEmail()+"') temp ";
+		}else{
+			sql += ", 0 temp ";
+		}
+		
+				sql += " from ta_info, ta_category ";
 		sql += " where ta_category_id = ta_info_category ";
 		if(info.getCategory()!=null  && !info.getCategory().equals("")){
 			sql += " and ta_info_category = "+info.getCategory()+" ";
@@ -103,6 +110,7 @@ public class InfoController {
 				e.setDislikes(rs.getInt(6));
 				e.setTimeElapsed(Utilities.elapsedTime(rs.getString(4), rs.getString(7)));
 				e.setCreatedDate(rs.getString(8));
+				e.setBookmarked(rs.getString(9));
 				return e;  
 			}  
 		});
