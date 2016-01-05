@@ -10,6 +10,7 @@ angular.module('ionicApp')
 	$scope.myTitle = 'Any Information!!!';
 
 	$scope.params={};
+	$scope.params.searchStyle = {};
 	$scope.params.infoTitle = '';
 	$scope.params.infoCategory = '';
 	$scope.params.information = '';
@@ -23,6 +24,7 @@ angular.module('ionicApp')
 	$scope.params.moreData = false;
 	$scope.params.categoryList = [];
 	$scope.params.sideMenuList = [];
+	$scope.params.easyCategoryList = [];
 	$scope.params.showPostInfo = true;
 	
 	$scope.params.searchText = "";
@@ -52,6 +54,7 @@ angular.module('ionicApp')
 	}
 	
 	function resetToHome(){
+		$scope.params.searchStyle = {};
 		$scope.params.items = [];
 		$scope.params.currentCategory = "";
 		$scope.params.currentTitle = "";
@@ -79,6 +82,10 @@ angular.module('ionicApp')
 			url:getURL("rest/info/categoryList")}
 		).then(function(response){
 			$scope.params.categoryList = response.data;
+			
+			for(var i in response.data){
+				$scope.params.easyCategoryList["C"+response.data[i]["id"]]=response.data[i]["desc"];
+			}
 			if(Token.get()){
 				updateUserInfoFromGoogle(function(){
 					goToPage("index");
@@ -125,6 +132,11 @@ angular.module('ionicApp')
 					$scope.params.items.push(data[temp]);
 					$scope.params.lastDate = data[temp].datetime;
 				}
+			}else{
+				if(!$scope.params.lastDate){
+					$scope.params.items = [];
+					$scope.params.items.push({"title":"No information found", "hideInfo":true});
+				}
 			}
 			checkCount();
 			$scope.$broadcast('scroll.infiniteScrollComplete');
@@ -153,6 +165,7 @@ angular.module('ionicApp')
 	
 	$scope.showCategoryInfo = function(category){
 		$scope.params.currentCategory = category.id;
+		$scope.params.searchStyle = {'padding-top':'30px'};
 		$scope.params.currentTitle = "";
 		$scope.params.currentInformation = "";
 		$scope.params.lastDate = "";
@@ -171,19 +184,40 @@ angular.module('ionicApp')
 			$scope.params.currentCategory = "";
 			$scope.params.currentTitle = "";
 			$scope.params.currentInformation = "";
+			$ionicPopup.alert({
+				template: 'Enter some text or select a criteria to search'
+			});
+			return;
 		}else{
 			$scope.params.currentCategory = $scope.params.searchCategory;
 			$scope.params.currentTitle = $scope.params.searchText;
 			$scope.params.currentInformation = $scope.params.searchText;
 		}
-		$scope.params.lastDate = "";
-		$scope.params.lastRefreshDate = "";
-		$scope.params.moreData = false;
-		$scope.params.items = [];
-		localCreatedData = [];
-		//populateInfo();
-		$ionicScrollDelegate.scrollTop(true);
-		goToPage("index");
+		
+		$http({method:"POST",
+			url:getURL("rest/info/count"),
+			data:{title: $scope.params.currentTitle, information : $scope.params.currentInformation, category:$scope.params.currentCategory}}
+		).then(function(response){
+			var data = response.data;
+			if(parseInt(data.no)){
+				$scope.params.lastDate = "";
+				$scope.params.lastRefreshDate = "";
+				$scope.params.moreData = false;
+				$scope.params.items = [];
+				$scope.params.searchStyle = {'padding-top':'30px'};
+				localCreatedData = [];
+				//populateInfo();
+				$ionicScrollDelegate.scrollTop(true);
+				goToPage("index");
+			}else{
+				$ionicPopup.alert({
+					template: 'No information found with the search criteria'
+				});
+			}
+		},function(response){
+			
+		});
+		
 	};
 	
 	$scope.checkInfoCount = function(){
@@ -532,6 +566,9 @@ angular.module('ionicApp')
 		if($ionicHistory.currentStateName() == "layout.searchinfo"){
 			$scope.params.searchText = "";
 			$scope.params.searchCategory = "";
+			$scope.params.currentCategory = "";
+			$scope.params.currentTitle = "";
+			$scope.params.currentInformation = "";
 		}
 		if($ionicHistory.currentStateName() == "layout.contactus"){
 			$scope.params.contact.name = "";

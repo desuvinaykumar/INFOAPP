@@ -9363,18 +9363,28 @@ a.button {
 	font-weight: 600;
 }
 
+.searchInfoFab{
+	top: 7%;
+    left: 2%;
+    padding: 2px 10px 2px 10px;
+    border: 1px solid blue;
+    box-sizing: border-box;
+}
 
-.fabButton { 
+.scrollToTopFabButton{
 	bottom: 7%;
 	right: 7%;
+	cursor : pointer;
+	background-color: blue;
+}
+
+.fabButton { 
   position: fixed; 
   z-index: 999;
   -moz-border-radius: 20px;
     -webkit-border-radius: 20px;
     -khtml-border-radius: 20px;
     border-radius: 20px;
-    background-color: blue;
-    cursor : pointer;
 }
 
 .fabButton span { 
