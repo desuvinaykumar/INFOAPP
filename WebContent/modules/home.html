@@ -1,8 +1,5 @@
 <ion-view>
-	<div class="fabButton searchInfoFab" ng-show="params.currentInformation || params.currentCategory">
-	    <div><div style="display:inline" ng-show="params.currentInformation"><b>Search text : </b>{{params.currentInformation}}&nbsp;&nbsp;&nbsp;</div><div style="display:inline" ng-show="params.currentCategory"><b>Displaying category : </b>{{params.easyCategoryList['C'+params.currentCategory]}}&nbsp;&nbsp;&nbsp;</div><i ng-click="showHomePage()" style="margin-left:3px" class="icon ion-close"></i></div>
-	</div>
-	<ion-content delegate-handle="info" id="homePage" ng-style="params.searchStyle">
+	<ion-content delegate-handle="info" id="homePage">
 		<div>
 		<ion-refresher pulling-text="Pull to refresh..."  on-refresh="doRefresh()">
 		  </ion-refresher>
